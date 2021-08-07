@@ -1,4 +1,4 @@
-from gh_release_installer.utils import Log
+from gh_release_install.utils import Log
 
 
 def test_log(capsys):

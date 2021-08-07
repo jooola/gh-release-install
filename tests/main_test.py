@@ -5,7 +5,7 @@ from pathlib import Path
 
 import requests_mock
 
-from gh_release_installer.main import template_property
+from gh_release_install.main import template_property
 
 
 def test_template_property():
