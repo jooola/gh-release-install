@@ -1,11 +1,11 @@
 [tool.poetry]
-name = "gh_release_installer"
+name = "gh_release_install"
 version = "0.1.0"
 description = "CLI helper to install Github releases on your system."
 authors = ["Joola <jooola@users.noreply.github.com>"]
 
 [tool.poetry.scripts]
-gh-release-install = 'gh_release_installer.cli:run'
+gh-release-install = 'gh_release_install.cli:run'
 
 [tool.poetry.dependencies]
 python = "^3.7"

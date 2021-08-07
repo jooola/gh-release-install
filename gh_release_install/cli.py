@@ -1,6 +1,6 @@
 import click
 
-from gh_release_installer import GhReleaseInstaller
+from gh_release_install import GhReleaseInstall
 
 
 @click.command()
@@ -49,7 +49,7 @@ def run(
             /usr/local/bin/prometheus
 
     """
-    GhReleaseInstaller(
+    GhReleaseInstall(
         repository=repository,
         asset=asset,
         destination=destination,

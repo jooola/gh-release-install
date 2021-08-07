@@ -27,7 +27,7 @@ def template_property(getter):
 
 
 # pylint: disable=too-many-instance-attributes
-class GhReleaseInstaller:
+class GhReleaseInstall:
     _local_tag = None
     _local_version = None
     _target_tag = None

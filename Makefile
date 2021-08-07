@@ -3,7 +3,7 @@
 SHELL := bash
 CPU_CORES := $(shell nproc)
 
-MODULE := gh_release_installer
+MODULE := gh_release_install
 
 setup:
 	poetry install
