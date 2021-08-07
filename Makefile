@@ -1,28 +1,36 @@
-.PHONY: lint test
+.PHONY: setup format lint test run-example
 
-SHELL := bash
-CPU_CORES := $(shell nproc)
+SHELL = bash
+CPU_CORES = $(shell nproc)
 
-MODULE := gh_release_install
+MODULE = gh_release_install
+# POETRY = tools/bin/poetry
+POETRY = tools/venv/bin/poetry
 
-setup:
-	poetry install
+$(POETRY):
+	mkdir -p tools
+	curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py > tools/install-poetry.py
+	POETRY_HOME=tools/ python3 tools/install-poetry.py --yes
 
-lint:
-	poetry run pylint ${MODULE} tests
+setup: $(POETRY)
+	$(POETRY) install
 
 format:
-	poetry run black .
-	poetry run isort --profile black .
+	${POETRY} run black .
+	${POETRY} run isort --profile black .
+
+lint:
+	${POETRY} run black . --diff --check
+	${POETRY} run pylint ${MODULE} tests
 
 test:
-	poetry run pytest -n ${CPU_CORES} --color=yes -v --cov=${MODULE} tests
+	${POETRY} run pytest -n ${CPU_CORES} --color=yes -v --cov=${MODULE} tests
 
 run-example:
-	poetry run gh-release-install \
+	${POETRY} run gh-release-install \
 		'prometheus/prometheus' \
 		'prometheus-{version}.linux-amd64.tar.gz' \
 		--extract 'prometheus-{version}.linux-amd64/prometheus' \
 		'./prometheus'
 
-all: lint test
+all: setup format lint test
