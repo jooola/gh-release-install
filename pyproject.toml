@@ -1,0 +1,33 @@
+[tool.poetry]
+name = "gh_release_installer"
+version = "0.1.0"
+description = "CLI helper to install Github releases on your system."
+authors = ["Joola <jooola@users.noreply.github.com>"]
+
+[tool.poetry.scripts]
+gh-release-install = 'gh_release_installer.cli:run'
+
+[tool.poetry.dependencies]
+python = "^3.7"
+requests = "^2.26.0"
+click = "^8.0.1"
+
+[tool.poetry.dev-dependencies]
+black = "^21.7b0"
+pylint = "^2.9.6"
+pytest = "^6.2.4"
+pytest-cov = "^2.12.1"
+pytest-xdist = "^2.3.0"
+requests-mock = "^1.9.3"
+isort = "^5.9.3"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pylint.messages_control]
+disable = [
+  "missing-module-docstring",
+  "missing-function-docstring",
+  "missing-class-docstring"
+]
