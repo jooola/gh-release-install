@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [master]
+    branches: [main]
   pull_request:
-    branches: [master]
+    branches: [main]
 
 jobs:
   pre-commit:
@@ -13,18 +13,36 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
+        with:
+          python-version: "3.x"
       - uses: pre-commit/action@v2.0.0
 
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: "3.x"
+
+      - run: make setup
+      - run: make lint
+
   test:
+    needs: lint
+
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
         os: [ubuntu-latest]
-        python-version: [3.6, 3.7, 3.8, 3.9]
+        python-version: ["3.6", " 3.7", "3.8", "3.9"]
 
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
-      - run: curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py | python -
+        with:
+          python-version: "3.x"
+
+      - run: make setup
       - run: make test

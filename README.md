@@ -1,5 +1,7 @@
 # Github release installer
 
+[![CI](https://github.com/jooola/gh-release-install/actions/workflows/ci.yml/badge.svg)](https://github.com/jooola/gh-release-install/actions/workflows/ci.yml)
+
 `gh-release-install` is a CLI helper to install Github releases on your system.
 It can be used for pretty much anything, to install a formatter in your CI, deploy
 some binary using an orcherstration tool, or on your desktop.

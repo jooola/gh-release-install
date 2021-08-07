@@ -42,7 +42,7 @@ repos:
       - id: format
         name: Format code
         description: Format code
-        entry: make format
+        entry: bash -c '[[ "$CI" != "true" ]] && make format || true'
         language: system
         pass_filenames: false
         always_run: true
@@ -50,7 +50,7 @@ repos:
       - id: lint
         name: Lint code
         description: Lint code
-        entry: make lint
+        entry: bash -c '[[ "$CI" != "true" ]] && make lint || true'
         language: system
         pass_filenames: false
         always_run: true
