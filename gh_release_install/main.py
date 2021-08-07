@@ -41,7 +41,7 @@ class GhReleaseInstall:
         destination: PathLike,
         extract: Optional[str] = None,
         version: str = LATEST_VERSION,
-        version_filename: Optional[str] = None,
+        version_file: Optional[str] = None,
     ):
         # Used for template properties
         self._tmpls = {}
@@ -50,7 +50,7 @@ class GhReleaseInstall:
         self.destination = destination
         self.extract = extract
         self.version = version
-        self.version_filename = version_filename
+        self.version_file = version_file
 
     def _format_tmpl(self, tmpl: Optional[str], **kwargs) -> Optional[str]:
         if tmpl is None:
@@ -76,16 +76,12 @@ class GhReleaseInstall:
         return self._format_tmpl(self._tmpls["extract"])
 
     @template_property
-    def version_filename(self) -> Optional[str]:
-        return self._format_tmpl(self._tmpls["version_filename"])
-
-    @property
-    def version_filepath(self) -> Optional[Path]:
-        result = self._format_tmpl(
-            self._tmpls["version_filename"],
+    def version_file(self) -> Optional[Path]:
+        version_file = self._format_tmpl(
+            self._tmpls["version_file"],
             destination=self.destination,
         )
-        return Path(result) if result is not None else None
+        return Path(version_file) if version_file is not None else None
 
     def _get_target_version(self):
         """
@@ -115,10 +111,8 @@ class GhReleaseInstall:
         """
         Get local tag / version from possible version file.
         """
-        version_filepath = self.version_filepath
-
-        if version_filepath is not None and version_filepath.exists():
-            local_version = version_filepath.read_text()
+        if self.version_file is not None and self.version_file.exists():
+            local_version = self.version_file.read_text()
             self._local_tag = local_version
             self._local_version = local_version.strip("v")
             Log.debug(f"Local version resolved to '{self._local_version}'.")
@@ -189,9 +183,9 @@ class GhReleaseInstall:
             Log.debug(f"Installed file to '{self.destination}'.")
 
         # Save to local tag/version file
-        if self.version_filepath is not None:
+        if self.version_file is not None:
             Log.info("Saving version file...")
-            self.version_filepath.write_text(self._target_tag)
-            Log.debug(f"Saved version file to '{self.version_filepath}'.")
+            self.version_file.write_text(self._target_tag)
+            Log.debug(f"Saved version file to '{self.version_file}'.")
 
         Log.info("Done")
