@@ -1,4 +1,26 @@
-# gh-release-install
+# Github release installer
+
+`gh-release-install` is a CLI helper to install Github releases on your system.
+It can be used for pretty much anything, to install a formatter in your CI, deploy
+some binary using an orcherstration tool, or on your desktop.
+
+## Installation
+
+Install the package from pip:
+
+```sh
+pip install gh-release-install
+gh-release-install --help
+```
+
+Or with with pipx:
+
+```sh
+pipx install gh-release-install
+gh-release-install --help
+```
+
+## Usage
 
 ```sh
 Usage: gh-release-install [OPTIONS] REPOSITORY ASSET DESTINATION
