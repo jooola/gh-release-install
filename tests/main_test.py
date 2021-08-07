@@ -48,7 +48,7 @@ def test_installer_get_target_version_fixed(installer):
 
 def test_installer_get_local_version(installer, tmp_path):
     installer.destination = tmp_path / "prometheus"
-    installer.version_filename = "{destination}.version"
+    installer.version_file = "{destination}.version"
 
     installer._get_local_version()
 
@@ -58,10 +58,10 @@ def test_installer_get_local_version(installer, tmp_path):
 
 def test_installer_get_local_version_exists(installer, tmp_path):
     installer.destination = tmp_path / "prometheus"
-    installer.version_filename = "{destination}.version"
+    installer.version_file = "{destination}.version"
 
-    tmp_version_filepath = installer.version_filepath
-    tmp_version_filepath.write_text("v2.28.1")
+    tmp_version_file = installer.version_file
+    tmp_version_file.write_text("v2.28.1")
 
     installer._get_local_version()
 
