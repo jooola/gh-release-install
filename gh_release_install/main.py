@@ -1,9 +1,7 @@
 import sys
-import tarfile
-import zipfile
 from os import PathLike
 from pathlib import Path
-from shutil import move
+from shutil import move, unpack_archive
 from tempfile import TemporaryDirectory
 from typing import Dict, Optional
 
@@ -145,19 +143,8 @@ class GhReleaseInstall:
         """
         Extract downloaded release archive.
         """
-        if self.asset.endswith(".zip"):
-            Log.debug("Asset file is a zip archive")
-            with zipfile.ZipFile(asset_file) as zip_file:
-                zip_file.extract(self.extract, tmp_dir)
-
-            return tmp_dir / self.extract
-
-        Log.debug("Asset file is a tar archive")
-        extracted_file = tmp_dir / Path(self.extract).name
-        with tarfile.open(asset_file) as tar_file:
-            with extracted_file.open("wb") as extracted_fd:
-                extracted_fd.write(tar_file.extractfile(self.extract).read())
-        return extracted_file
+        unpack_archive(asset_file, tmp_dir)
+        return tmp_dir / self.extract
 
     def run(self):
         self._get_target_version()
