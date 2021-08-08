@@ -23,6 +23,7 @@ format:
 lint:
 	${POETRY} run black . --diff --check
 	${POETRY} run pylint ${MODULE} tests
+	${POETRY} run mypy ${MODULE} tests || true
 
 test:
 	${POETRY} run pytest -n ${CPU_CORES} --color=yes -v --cov=${MODULE} tests

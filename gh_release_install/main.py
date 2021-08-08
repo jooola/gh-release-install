@@ -5,7 +5,7 @@ from os import PathLike
 from pathlib import Path
 from shutil import move
 from tempfile import TemporaryDirectory
-from typing import Optional
+from typing import Dict, Optional
 
 import requests
 
@@ -28,10 +28,13 @@ def template_property(getter):
 
 # pylint: disable=too-many-instance-attributes
 class GhReleaseInstall:
-    _local_tag = None
-    _local_version = None
-    _target_tag = None
-    _target_version = None
+    _local_tag: Optional[str] = None
+    _local_version: Optional[str] = None
+    _target_tag: Optional[str] = None
+    _target_version: Optional[str] = None
+
+    # Used for template properties
+    _tmpls: Dict[str, str] = {}
 
     # pylint: disable=too-many-arguments
     def __init__(
@@ -43,8 +46,6 @@ class GhReleaseInstall:
         version: str = LATEST_VERSION,
         version_file: Optional[str] = None,
     ):
-        # Used for template properties
-        self._tmpls = {}
         self.repository = repository
         self.asset = asset
         self.destination = destination
@@ -52,7 +53,7 @@ class GhReleaseInstall:
         self.version = version
         self.version_file = version_file
 
-    def _format_tmpl(self, tmpl: Optional[str], **kwargs) -> Optional[str]:
+    def _format_tmpl(self, tmpl: Optional[str], **kwargs: str) -> Optional[str]:
         if tmpl is None:
             return None
 
@@ -64,7 +65,7 @@ class GhReleaseInstall:
         return str(tmpl).format(**kwargs)
 
     @template_property
-    def asset(self) -> str:
+    def asset(self) -> Optional[str]:
         return self._format_tmpl(self._tmpls["asset"])
 
     @template_property
