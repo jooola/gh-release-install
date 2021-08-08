@@ -1,8 +1,8 @@
 ## Custom .gitignore
 ################################################################################
 
-# Some project tools
-/tools/
+# Poetry
+.poetry/
 
 ## Github Python .gitignore
 ## See https://github.com/github/gitignore/blob/master/Python.gitignore
