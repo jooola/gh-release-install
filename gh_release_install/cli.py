@@ -26,6 +26,22 @@ from gh_release_install.utils import Log
     metavar="<filename>",
     help="File to track the version installed.",
 )
+@click.option(
+    "-v",
+    "--verbose",
+    "verbosity",
+    count=True,
+    type=click.IntRange(0, 2),
+    default=0,
+    help="Increase verbosity.",
+)
+@click.option(
+    "-q",
+    "--quiet",
+    "verbosity",
+    flag_value=-1,
+    help="Disable logging.",
+)
 # pylint: disable=too-many-arguments
 def run(
     repository: str,
@@ -34,6 +50,7 @@ def run(
     destination: str,
     version: str,
     version_file: str,
+    verbosity: int,
 ):
     """
     Install GitHub release file on your system.
@@ -89,6 +106,10 @@ def run(
         --version-file /opt/versions/prometheus.version
         --version-file {destination}.version
 
+    Increase the verbosity using the --verbose flag. To disable logging set the --quiet
+    flag. The default verbosity is 'error'. Those are the different log levels 'quiet',
+    'error', 'info', 'debug'.
+
     Some full examples:
 
     \b
@@ -114,6 +135,7 @@ def run(
         extract=extract,
         version=version,
         version_file=version_file,
+        verbosity=verbosity,
     )
 
     try:
