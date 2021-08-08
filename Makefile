@@ -32,10 +32,10 @@ e2e:
 	${POETRY} run pytest -n ${CPU_CORES} --color=yes -v --cov=${MODULE} e2e
 
 run-example:
-	${POETRY} run gh-release-install \
-		'prometheus/prometheus' \
-		'prometheus-{version}.linux-amd64.tar.gz' \
-		--extract 'prometheus-{version}.linux-amd64/prometheus' \
-		'./prometheus'
+	${POETRY} run gh-release-install -vv \
+		'grafana/loki' \
+		'loki-linux-amd64.zip' --extract 'loki-linux-amd64' \
+		'./loki' \
+		--version 'latest' --version-file '{destination}.version'
 
 all: setup format lint test
