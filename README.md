@@ -1,6 +1,8 @@
 # Github release installer
 
 [![CI](https://github.com/jooola/gh-release-install/actions/workflows/ci.yml/badge.svg)](https://github.com/jooola/gh-release-install/actions/workflows/ci.yml)
+[![PyPI Python Versions](https://img.shields.io/pypi/pyversions/gh-release-install.svg)](https://pypi.org/project/gh-release-install/)
+[![PyPI Package Version](https://img.shields.io/pypi/v/gh-release-install.svg)](https://pypi.org/project/gh-release-install/)
 
 `gh-release-install` is a CLI helper to install Github releases on your system.
 It can be used for pretty much anything, to install a formatter in your CI, deploy
