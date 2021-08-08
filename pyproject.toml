@@ -3,6 +3,17 @@ name = "gh_release_install"
 version = "0.1.0"
 description = "CLI helper to install Github releases on your system."
 authors = ["Joola <jooola@users.noreply.github.com>"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Environment :: Console",
+  "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+  "Programming Language :: Python :: 3.6",
+  "Programming Language :: Python :: 3.7",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Topic :: System :: Installation/Setup",
+  "Topic :: System :: Software Distribution",
+]
 
 [tool.poetry.scripts]
 gh-release-install = 'gh_release_install.cli:run'
