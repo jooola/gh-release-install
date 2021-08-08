@@ -1,4 +1,4 @@
-.PHONY: setup format lint test run-example
+.PHONY: setup format lint test e2e run-example
 
 SHELL = bash
 CPU_CORES = $(shell nproc)
@@ -25,6 +25,9 @@ lint:
 
 test:
 	${POETRY} run pytest -n ${CPU_CORES} --color=yes -v --cov=${MODULE} tests
+
+e2e:
+	${POETRY} run pytest -n ${CPU_CORES} --color=yes -v --cov=${MODULE} e2e
 
 run-example:
 	${POETRY} run gh-release-install \
