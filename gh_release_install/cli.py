@@ -118,6 +118,7 @@ def run(
 
     try:
         installer.run()
+    # pylint: disable=broad-except
     except Exception as exception:
         Log.error(exception)
         sys.exit(1)
