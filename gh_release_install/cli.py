@@ -1,6 +1,9 @@
+import sys
+
 import click
 
 from gh_release_install import GhReleaseInstall
+from gh_release_install.utils import Log
 
 
 @click.command()
@@ -104,11 +107,17 @@ def run(
         --version-filename '{destination}.version'
 
     """
-    GhReleaseInstall(
+    installer = GhReleaseInstall(
         repository=repository,
         asset=asset,
         destination=destination,
         extract=extract,
         version=version,
         version_file=version_file,
-    ).run()
+    )
+
+    try:
+        installer.run()
+    except Exception as exception:
+        Log.error(exception)
+        sys.exit(1)
