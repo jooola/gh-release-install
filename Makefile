@@ -4,13 +4,14 @@ SHELL = bash
 CPU_CORES = $(shell nproc)
 
 MODULE = gh_release_install
-# POETRY = tools/bin/poetry
-POETRY = tools/venv/bin/poetry
+
+POETRY_HOME = .poetry
+POETRY = $(POETRY_HOME)/venv/bin/poetry
 
 $(POETRY):
-	mkdir -p tools
-	curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py > tools/install-poetry.py
-	POETRY_HOME=tools/ python3 tools/install-poetry.py --yes
+	mkdir -p $(POETRY_HOME)
+	curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py > $(POETRY_HOME)/install-poetry.py
+	POETRY_HOME=$(POETRY_HOME) python3 $(POETRY_HOME)/install-poetry.py --yes
 
 setup: $(POETRY)
 	$(POETRY) install
