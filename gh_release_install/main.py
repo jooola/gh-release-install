@@ -43,6 +43,7 @@ class GhReleaseInstall:
         extract: Optional[str] = None,
         version: str = LATEST_VERSION,
         version_file: Optional[str] = None,
+        verbosity: Optional[int] = -1,  # Disable logs
     ):
         self.repository = repository
         self.asset = asset
@@ -50,6 +51,9 @@ class GhReleaseInstall:
         self.extract = extract
         self.version = version
         self.version_file = version_file
+
+        Log.set_level(verbosity)
+        Log.debug(f"Verbosity is set to '{Log.level}'.")
 
     def _format_tmpl(self, tmpl: Optional[str], **kwargs: str) -> Optional[str]:
         if tmpl is None:
@@ -86,11 +90,11 @@ class GhReleaseInstall:
         """
         If not provided, get latest tag/version from the Github repository.
         """
-        Log.debug(f"'{self.version}' version requested")
+        Log.debug(f"Requested '{self.version}' version.")
         if self.version == LATEST_VERSION:
             url = f"https://api.github.com/repos/{self.repository}/releases/latest"
 
-            Log.debug(f"Calling {url}")
+            Log.debug(f"Calling '{url}'.")
             res = requests.get(url)
             res.raise_for_status()
             Log.debug(f"{res.request.method} {res.request.url} {res.status_code}")
@@ -125,14 +129,14 @@ class GhReleaseInstall:
             f"/{self.repository}/releases/download/{self._target_tag}/{self.asset}"
         )
 
-        Log.debug(f"Calling {url}")
+        Log.debug(f"Calling '{url}'.")
         res = requests.get(url, stream=True)
         res.raise_for_status()
         Log.debug(f"{res.request.method} {res.request.url} {res.status_code}")
 
         tmp_file = tmp_dir / self.asset
 
-        Log.debug("Saving asset to '{tmp_file}'.")
+        Log.debug(f"Saving asset to '{tmp_file}'.")
         with tmp_file.open("wb") as tmp_fd:
             for chunk in res.iter_content(chunk_size=256):
                 tmp_fd.write(chunk)
@@ -150,6 +154,7 @@ class GhReleaseInstall:
         self._get_target_version()
         self._get_local_version()
 
+        Log.debug(f"Target '{self._target_tag}' == Local '{self._local_tag}'")
         if self._target_version == self._local_version:
             Log.info("Target version is already installed, exiting...")
             sys.exit(0)
