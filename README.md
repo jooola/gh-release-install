@@ -6,6 +6,38 @@
 It can be used for pretty much anything, to install a formatter in your CI, deploy
 some binary using an orcherstration tool, or on your desktop.
 
+This project was mainly created to...
+
+```sh
+# ...turn this mess:
+wget --quiet --output-document=- "https://github.com/koalaman/shellcheck/releases/download/v0.7.1/shellcheck-v0.7.1.linux.x86_64.tar.xz" \
+    | tar --extract --xz --directory=/usr/local/bin --strip-components=1 --wildcards 'shellcheck*/shellcheck' \
+    && chmod +x /usr/local/bin/shellcheck
+
+wget --quiet --output-document=/usr/local/bin/shfmt "https://github.com/mvdan/sh/releases/download/v3.2.1/shfmt_v3.2.1_linux_amd64" \
+    && chmod +x /usr/local/bin/shfmt
+
+# Into this:
+pip3 install gh-release-install
+
+gh-release-install \
+      "koalaman/shellcheck" \
+      "shellcheck-{tag}.linux.x86_64.tar.xz" --extract "shellcheck-{tag}/shellcheck" \
+      "/usr/bin/shellcheck"
+
+gh-release-install \
+      "mvdan/sh" \
+      "shfmt_{tag}_linux_amd64" \
+      "/usr/bin/shfmt"
+```
+
+Features:
+
+- Download releases from Github.
+- Extract zip or tarball on the fly.
+- Pin to a desired version or get the `latest` version.
+- Keep track of the local tools version using a version file.
+
 ## Installation
 
 Install the package from pip:
