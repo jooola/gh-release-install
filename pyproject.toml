@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "gh_release_install"
-version = "0.1.0"
+version = "0.2.0"
 description = "CLI helper to install Github releases on your system."
 authors = ["Joola <jooola@users.noreply.github.com>"]
 classifiers = [
