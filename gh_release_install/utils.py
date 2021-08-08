@@ -1,5 +1,5 @@
 class Log:
-    levels = ("quiet", "info", "error", "debug")
+    levels = ("quiet", "error", "info", "debug")
     level = 1
 
     @staticmethod
@@ -8,11 +8,11 @@ class Log:
             print(f"{Log.levels[level]}: {message}")
 
     @staticmethod
-    def info(message: str):
+    def error(message: str):
         Log.log(1, message)
 
     @staticmethod
-    def error(message: str):
+    def info(message: str):
         Log.log(2, message)
 
     @staticmethod
