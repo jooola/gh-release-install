@@ -53,3 +53,5 @@ git stash pop --quiet
 git add "$pyproject" || error "could not stage $pyproject!"
 git commit -m "$release" --no-verify || error "could not commit the version bump!"
 git tag "$new_tag" -a -m "$release" || error "could not tag the version bump!"
+
+echo "Run 'git push --follow-tags' in order to publish the release on Github!"
