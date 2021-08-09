@@ -20,7 +20,7 @@ classifiers = [
 gh-release-install = 'gh_release_install.cli:run'
 
 [tool.poetry.dependencies]
-python = "^3.7"
+python = "^3.6"
 requests = "^2.26.0"
 click = "^8.0.1"
 
