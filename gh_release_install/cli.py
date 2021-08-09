@@ -76,7 +76,7 @@ def run(
 
     \b
     Examples:
-        /usr/bin/local/shfmt
+        /usr/local/bin/shfmt
         /opt/prometheus/prometheus
 
     If the release asset is an archive, use the --extract flag to
@@ -116,7 +116,7 @@ def run(
     gh-release-install \\
         'mvdan/sh' \\
         'shfmt_{tag}_linux_amd64' \\
-        '/usr/bin/local/shfmt' \\
+        '/usr/local/bin/shfmt' \\
         --version 'v3.3.1'
 
     \b
