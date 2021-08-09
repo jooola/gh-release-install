@@ -17,25 +17,28 @@ setup: $(POETRY)
 	$(POETRY) install
 
 format:
-	${POETRY} run black .
-	${POETRY} run isort --profile black .
+	$(POETRY) run black .
+	$(POETRY) run isort --profile black .
 
 lint:
-	${POETRY} run black . --diff --check
-	${POETRY} run pylint ${MODULE} tests
-	${POETRY} run mypy ${MODULE} tests || true
+	$(POETRY) run black . --diff --check
+	$(POETRY) run pylint $(MODULE) tests
+	$(POETRY) run mypy $(MODULE) tests || true
 
 test:
-	${POETRY} run pytest -n ${CPU_CORES} --color=yes -v --cov=${MODULE} tests
+	$(POETRY) run pytest -n $(CPU_CORES) --color=yes -v --cov=$(MODULE) tests
 
 e2e:
-	${POETRY} run pytest -n ${CPU_CORES} --color=yes -v --cov=${MODULE} e2e
+	$(POETRY) run pytest -n $(CPU_CORES) --color=yes -v --cov=$(MODULE) e2e
 
 run-example:
-	${POETRY} run gh-release-install -vv \
+	$(POETRY) run gh-release-install -vv \
 		'grafana/loki' \
 		'loki-linux-amd64.zip' --extract 'loki-linux-amd64' \
 		'./loki' \
 		--version 'latest' --version-file '{destination}.version'
+
+ci-publish:
+	$(POETRY) publish --no-interaction --build
 
 all: setup format lint test
