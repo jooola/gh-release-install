@@ -82,7 +82,7 @@ Usage: gh-release-install [OPTIONS] REPOSITORY ASSET DESTINATION
   '{tag}'.
 
   Examples:
-      /usr/bin/local/shfmt
+      /usr/local/bin/shfmt
       /opt/prometheus/prometheus
 
   If the release asset is an archive, use the --extract flag to extract the
@@ -109,12 +109,16 @@ Usage: gh-release-install [OPTIONS] REPOSITORY ASSET DESTINATION
       --version-file /opt/versions/prometheus.version
       --version-file {destination}.version
 
+  Increase the verbosity using the --verbose flag. To disable logging set the
+  --quiet flag. The default verbosity is 'error'. Those are the different log
+  levels 'quiet', 'error', 'info', 'debug'.
+
   Some full examples:
 
   gh-release-install \
       'mvdan/sh' \
       'shfmt_{tag}_linux_amd64' \
-      '/usr/bin/local/shfmt' \
+      '/usr/local/bin/shfmt' \
       --version 'v3.3.1'
 
   gh-release-install \
@@ -128,6 +132,7 @@ Options:
   --extract <filename>       Archive member to extract.
   --version <version>        Release version to install.
   --version-file <filename>  File to track the version installed.
+  -v, --verbose              Increase verbosity.  [0<=x<=2]
+  -q, --quiet                Disable logging.
   --help                     Show this message and exit.
-
 ```
