@@ -26,6 +26,13 @@ jobs:
         with:
           python-version: "3.x"
 
+      - uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/poetry.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
       - run: make setup
       - run: make lint
 
@@ -43,6 +50,13 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
+      - uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/poetry.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
       - run: make setup
       - run: make test
 
@@ -54,6 +68,13 @@ jobs:
       - uses: actions/setup-python@v2
         with:
           python-version: "3.x"
+
+      - uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/poetry.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
 
       - run: make setup
       - run: make e2e
@@ -67,6 +88,13 @@ jobs:
       - uses: actions/setup-python@v2
         with:
           python-version: "3.x"
+
+      - uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/poetry.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
 
       - run: make setup
       - run: >
