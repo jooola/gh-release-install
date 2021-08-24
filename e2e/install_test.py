@@ -75,3 +75,22 @@ def test_installer_run_loki(tmp_path):
         "  go version:       go1.15.3\n"
         "  platform:         linux/amd64\n"
     )
+
+
+def test_installer_run_restic(tmp_path):
+    destination_file = tmp_path / "restic"
+
+    installer = GhReleaseInstall(
+        repository="restic/restic",
+        asset="restic_{version}_linux_amd64.bz2",
+        extract="restic_{version}_linux_amd64",
+        destination=destination_file,
+        version="v0.12.1",
+    )
+
+    installer.run()
+
+    assert destination_file.is_file()
+
+    output = check_output(f"{destination_file} version", text=True, shell=True)
+    assert output == "restic 0.12.1 compiled with go1.16.6 on linux/amd64\n"
