@@ -7,6 +7,7 @@ from typing import Dict, Optional
 
 import requests
 
+from .unpack import register_unpack_formats
 from .utils import Log
 
 LATEST_VERSION = "latest"
@@ -54,6 +55,8 @@ class GhReleaseInstall:
 
         Log.set_level(verbosity)
         Log.debug(f"Verbosity is set to '{Log.level}'.")
+
+        register_unpack_formats()
 
     def _format_tmpl(self, tmpl: Optional[str], **kwargs: str) -> Optional[str]:
         if tmpl is None:
