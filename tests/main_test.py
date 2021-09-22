@@ -30,7 +30,11 @@ def test_installer_get_target_version_latest(installer):
     with requests_mock.Mocker() as mocker:
         mocker.get(
             "https://api.github.com/repos/prometheus/prometheus/releases/latest",
-            json=json.loads(Path("tests/fixtures/gh_releases_latest.json").read_text()),
+            json=json.loads(
+                Path("tests/fixtures/gh_releases_latest.json").read_text(
+                    encoding="utf-8"
+                )
+            ),
         )
         installer._get_target_version()
 
