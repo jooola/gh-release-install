@@ -12,4 +12,4 @@ def test_unpack_bz2(tmp_path):
     _unpack_bz2(src, tmp_path)
 
     assert dest.is_file
-    assert dest.read_text() == "Hello World\n"
+    assert dest.read_text(encoding="utf-8") == "Hello World\n"
