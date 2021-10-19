@@ -34,6 +34,7 @@ jobs:
             ${{ runner.os }}-pip-
 
       - run: make setup
+      - run: echo "::add-matcher::.github/matcher-python.json"
       - run: make lint
 
   test:
