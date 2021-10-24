@@ -71,8 +71,10 @@ def run(
         shfmt_{tag}_linux_amd64
         prometheus-{version}.linux-amd64.tar.gz
 
-    The DESTINATION argument define the DESTINATION path for the downloaded file.
-    Note that DESTINATION may contain variables such as '{version}' or '{tag}'.
+    The DESTINATION argument define the DESTINATION path for the downloaded
+    file. If DESTINATION is a directory, then the asset name will be written as
+    the file name in the directory. Note that DESTINATION may contain variables
+    such as '{version}' or '{tag}'.
 
     \b
     Examples:

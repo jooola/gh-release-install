@@ -173,10 +173,13 @@ class GhReleaseInstall:
                 asset_file = self._extract_release_asset(tmp_dir, asset_file)
                 Log.debug(f"Extracted archive to '{asset_file}'.")
 
+            destination_path = self.destination
+            if destination_path.is_dir():
+                destination_path = destination_path / asset_file.name
             Log.info("Installing file...")
-            move(asset_file, self.destination)
-            self.destination.chmod(0o755)
-            Log.debug(f"Installed file to '{self.destination}'.")
+            move(asset_file, destination_path)
+            destination_path.chmod(0o755)
+            Log.debug(f"Installed file to '{destination_path}'.")
 
         # Save to local tag/version file
         if self.version_file is not None:
