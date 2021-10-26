@@ -101,7 +101,9 @@ def run(
     To track the version installed on the system, use the --version-file flag to
     define the <filename> where the version should be saved.
     The default is not to save this version file.
-    Note that <filename> may contain variables such as '{destination}'.
+    Note that <filename> may contain variables such as '{destination}'. Also
+    note that '{destination}' is the full path, including filename, to the
+    asset (even if DESTINATION provided in the commandline is a directory).
 
     \b
     Examples:
