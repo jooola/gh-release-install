@@ -75,7 +75,12 @@ class GhReleaseInstall:
 
     @template_property
     def destination(self) -> Path:
-        return Path(self._format_tmpl(self._tmpls["destination"]))
+        destination = Path(self._format_tmpl(self._tmpls["destination"]))
+
+        if destination.is_dir():
+            return destination / self.asset
+
+        return destination
 
     @template_property
     def extract(self) -> Optional[str]:

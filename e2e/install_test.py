@@ -48,8 +48,31 @@ def test_installer_run_shfmt(tmp_path):
     output = check_output(f"{destination_file} -version", text=True, shell=True)
     assert output == "v3.3.1\n"
 
-    assert installer.version_file.is_file()
-    assert installer.version_file.read_text() == "v3.3.1"
+    assert (tmp_path / "shfmt.version").is_file()
+    assert (tmp_path / "shfmt.version").read_text() == "v3.3.1"
+
+
+def test_installer_run_shfmt_install_to_dir(tmp_path):
+    destination_file = tmp_path / "shfmt_v3.3.1_linux_amd64"
+    destination_dir = tmp_path
+
+    installer = GhReleaseInstall(
+        repository="mvdan/sh",
+        asset="shfmt_{tag}_linux_amd64",
+        destination=destination_dir,
+        version="v3.3.1",
+        version_file="{destination}.version",
+    )
+
+    installer.run()
+
+    assert destination_file.is_file()
+
+    output = check_output(f"{destination_file} -version", text=True, shell=True)
+    assert output == "v3.3.1\n"
+
+    assert (tmp_path / "shfmt_v3.3.1_linux_amd64.version").is_file()
+    assert (tmp_path / "shfmt_v3.3.1_linux_amd64.version").read_text() == "v3.3.1"
 
 
 def test_installer_run_loki(tmp_path):
