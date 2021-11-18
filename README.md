@@ -78,8 +78,9 @@ Usage: gh-release-install [OPTIONS] REPOSITORY ASSET DESTINATION
       prometheus-{version}.linux-amd64.tar.gz
 
   The DESTINATION argument define the DESTINATION path for the downloaded
-  file. Note that DESTINATION may contain variables such as '{version}' or
-  '{tag}'.
+  file. If DESTINATION is a directory, then the asset name will be written as
+  the file name in the directory. Note that DESTINATION may contain variables
+  such as '{version}' or '{tag}'.
 
   Examples:
       /usr/local/bin/shfmt
@@ -101,9 +102,11 @@ Usage: gh-release-install [OPTIONS] REPOSITORY ASSET DESTINATION
       v2.28.1
 
   To track the version installed on the system, use the --version-file flag to
-  define the <filename> where the version should be saved. The default is not
-  to save this version file. Note that <filename> may contain variables such
-  as '{destination}'.
+  define the <filename> where the version should be saved.
+  The default is not to save this version file.
+  Note that <filename> may contain variables such as '{destination}'. Also note
+  that '{destination}' is the full path, including filename, to the asset (even
+  if DESTINATION provided in the commandline is a directory).
 
   Examples:
       --version-file /opt/versions/prometheus.version
