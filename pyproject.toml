@@ -35,7 +35,7 @@ pytest = "^7.0.1"
 pytest-cov = "^3.0.0"
 pytest-xdist = "^2.5.0"
 requests-mock = "^1.9.3"
-types-requests = "^2.27.15"
+types-requests = "^2.27.16"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
