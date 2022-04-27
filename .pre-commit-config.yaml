@@ -37,6 +37,12 @@ repos:
       - id: codespell
         args: [--ignore-words=.codespellignore]
 
+  - repo: https://github.com/asottile/pyupgrade
+    rev: v2.32.0
+    hooks:
+      - id: pyupgrade
+        args: [--py3-plus, --py36-plus]
+
   - repo: local
     hooks:
       - id: format
