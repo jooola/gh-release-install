@@ -450,7 +450,7 @@ python-versions = "*"
 
 [[package]]
 name = "types-requests"
-version = "2.27.26"
+version = "2.27.30"
 description = "Typing stubs for requests"
 category = "dev"
 optional = false
@@ -511,7 +511,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytes
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6"
-content-hash = "d4682f2f857d3ea461e63ce3a48ae364332d3e6b989d34131af895a14178db99"
+content-hash = "652fe8c448cd6056a894dad517f068e8247250b28c50db6d247cb665cad8565c"
 
 [metadata.files]
 appdirs = [
@@ -812,8 +812,8 @@ typed-ast = [
     {file = "typed_ast-1.4.3.tar.gz", hash = "sha256:fb1bbeac803adea29cedd70781399c99138358c26d05fcbd23c13016b7f5ec65"},
 ]
 types-requests = [
-    {file = "types-requests-2.27.26.tar.gz", hash = "sha256:a6a04c0274c0949fd0525f35d8b53ac34e77afecbeb3c4932ddc6ce675ac009c"},
-    {file = "types_requests-2.27.26-py3-none-any.whl", hash = "sha256:302137cb5bd482357398a155faf3ed095855fbc6994e952d0496c7fd50f44125"},
+    {file = "types-requests-2.27.30.tar.gz", hash = "sha256:ca8d7cc549c3d10dbcb3c69c1b53e3ffd1270089c1001a65c1e9e1017eb5e704"},
+    {file = "types_requests-2.27.30-py3-none-any.whl", hash = "sha256:b9b6cd0a6e5d500e56419b79f44ec96f316e9375ff6c8ee566c39d25e9612621"},
 ]
 types-urllib3 = [
     {file = "types-urllib3-1.26.6.tar.gz", hash = "sha256:51b4aff54099896bea28cbdd49d6e7d389dd5ac775d7a4b72c642c56b215d26f"},
