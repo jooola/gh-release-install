@@ -31,7 +31,7 @@ jobs:
 
       - uses: snok/install-poetry@v1
         with:
-          virtualenvs-in-project: false
+          virtualenvs-in-project: true
 
       - uses: actions/cache@v3
         with:
@@ -60,7 +60,7 @@ jobs:
 
       - uses: snok/install-poetry@v1
         with:
-          virtualenvs-in-project: false
+          virtualenvs-in-project: true
 
       - uses: actions/cache@v3
         with:
@@ -83,7 +83,7 @@ jobs:
 
       - uses: snok/install-poetry@v1
         with:
-          virtualenvs-in-project: false
+          virtualenvs-in-project: true
 
       - uses: actions/cache@v3
         with:
@@ -107,7 +107,7 @@ jobs:
 
       - uses: snok/install-poetry@v1
         with:
-          virtualenvs-in-project: false
+          virtualenvs-in-project: true
 
       - uses: actions/cache@v3
         with:
