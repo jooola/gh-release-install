@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from gh_release_install.utils import Log
 
 

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import bz2
 from pathlib import Path
 from shutil import get_unpack_formats, register_unpack_format

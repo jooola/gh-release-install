@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import pytest
 
 from gh_release_install import GhReleaseInstall

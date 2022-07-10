@@ -46,3 +46,8 @@ disable = [
   "missing-function-docstring",
   "missing-class-docstring"
 ]
+
+[tool.isort]
+add_imports = [
+  "from __future__ import annotations",
+]
