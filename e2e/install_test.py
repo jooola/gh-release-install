@@ -15,6 +15,7 @@ def test_installer_run_node_exporter(tmp_path):
         destination=destination_file,
         version="v1.2.2",
         version_file="{destination}.version",
+        verbosity=2,
     )
 
     installer.run()
@@ -22,7 +23,7 @@ def test_installer_run_node_exporter(tmp_path):
     assert destination_file.exists()
     assert destination_file.is_file()
 
-    output = check_output(f"{destination_file} --version", text=True, shell=True)
+    output = check_output([destination_file, "--version"], text=True)
     assert output == (
         "node_exporter, version 1.2.2 (branch: HEAD, revision: 26645363b486e12be40af7ce4fc91e731a33104e)\n"
         "  build user:       root@b9cb4aa2eb17\n"
@@ -41,13 +42,14 @@ def test_installer_run_shfmt(tmp_path):
         destination=destination_file,
         version="v3.3.1",
         version_file="{destination}.version",
+        verbosity=2,
     )
 
     installer.run()
 
     assert destination_file.is_file()
 
-    output = check_output(f"{destination_file} -version", text=True, shell=True)
+    output = check_output([destination_file, "-version"], text=True)
     assert output == "v3.3.1\n"
 
     assert (tmp_path / "shfmt.version").is_file()
@@ -64,13 +66,14 @@ def test_installer_run_shfmt_install_to_dir(tmp_path):
         destination=destination_dir,
         version="v3.3.1",
         version_file="{destination}.version",
+        verbosity=2,
     )
 
     installer.run()
 
     assert destination_file.is_file()
 
-    output = check_output(f"{destination_file} -version", text=True, shell=True)
+    output = check_output([destination_file, "-version"], text=True)
     assert output == "v3.3.1\n"
 
     assert (tmp_path / "shfmt_v3.3.1_linux_amd64.version").is_file()
@@ -85,6 +88,7 @@ def test_installer_run_loki(tmp_path):
         asset="loki-linux-amd64.zip",
         extract="loki-linux-amd64",
         destination=destination_file,
+        verbosity=2,
         version="v2.2.1",
     )
 
@@ -92,7 +96,7 @@ def test_installer_run_loki(tmp_path):
 
     assert destination_file.is_file()
 
-    output = check_output(f"{destination_file} -version", text=True, shell=True)
+    output = check_output([destination_file, "-version"], text=True)
     assert output == (
         "loki, version 2.2.1 (branch: HEAD, revision: babea82e)\n"
         "  build user:       root@e2d295b84e26\n"
@@ -111,11 +115,12 @@ def test_installer_run_restic(tmp_path):
         extract="restic_{version}_linux_amd64",
         destination=destination_file,
         version="v0.12.1",
+        verbosity=2,
     )
 
     installer.run()
 
     assert destination_file.is_file()
 
-    output = check_output(f"{destination_file} version", text=True, shell=True)
+    output = check_output([destination_file, "version"], text=True)
     assert output == "restic 0.12.1 compiled with go1.16.6 on linux/amd64\n"
