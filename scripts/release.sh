@@ -25,7 +25,7 @@ command -v git > /dev/null || error "git command not found!"
 
 pyproject="pyproject.toml"
 
-pkg_version=$(grep "version =" $pyproject | cut -d '"' -f2 || error "could not determine package version in $pyproject!")
+pkg_version=$(poetry version -s || error "could not determine package version in $pyproject!")
 git_version=$(git describe --abbrev=0 --tags | sed 's/^v//' || error "could not determine git version!")
 
 # No version change
@@ -46,11 +46,10 @@ make test || error "testing project failed!"
 make e2e || error "testing project e2e failed!"
 
 new_tag="v$pkg_version"
-release="release $new_tag"
 
 git stash pop --quiet
 git add "$pyproject" || error "could not stage $pyproject!"
-git commit -m "chore: $release" --no-verify || error "could not commit the version bump!"
-git tag "$new_tag" -a -m "$release" || error "could not tag the version bump!"
+git commit -m "chore: release $new_tag" --no-verify || error "could not commit the version bump!"
+git tag "$new_tag" -a -m "$new_tag" || error "could not tag the version bump!"
 
 echo "Run 'git push --follow-tags' in order to publish the release on Github!"
