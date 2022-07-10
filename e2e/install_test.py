@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from subprocess import check_output
 
 from gh_release_install import GhReleaseInstall

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from pathlib import Path
 
 from gh_release_install.unpack import _unpack_bz2

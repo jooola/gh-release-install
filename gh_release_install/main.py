@@ -1,9 +1,10 @@
+from __future__ import annotations
+
 import sys
-from os import PathLike, environ
+from os import environ
 from pathlib import Path
 from shutil import move, unpack_archive
 from tempfile import TemporaryDirectory
-from typing import Dict, Optional
 
 from requests import Session
 
@@ -27,13 +28,13 @@ def template_property(getter):
 
 # pylint: disable=too-many-instance-attributes
 class GhReleaseInstall:
-    _local_tag: Optional[str] = None
-    _local_version: Optional[str] = None
-    _target_tag: Optional[str] = None
-    _target_version: Optional[str] = None
+    _local_tag: str | None = None
+    _local_version: str | None = None
+    _target_tag: str | None = None
+    _target_version: str | None = None
 
     # Used for template properties
-    _tmpls: Dict[str, str] = {}
+    _tmpls: dict[str, str] = {}
 
     _session: Session
 
@@ -42,15 +43,15 @@ class GhReleaseInstall:
         self,
         repository: str,
         asset: str,
-        destination: PathLike,
-        extract: Optional[str] = None,
+        destination: str | Path,
+        extract: str | None = None,
         version: str = LATEST_VERSION,
-        version_file: Optional[str] = None,
-        verbosity: Optional[int] = -1,  # Disable logs
+        version_file: str | None = None,
+        verbosity: int | None = -1,  # Disable logs
     ):
         self.repository = repository
         self.asset = asset
-        self.destination = destination
+        self.destination = Path(destination)
         self.extract = extract
         self.version = version
         self.version_file = version_file
@@ -65,7 +66,7 @@ class GhReleaseInstall:
 
         register_unpack_formats()
 
-    def _format_tmpl(self, tmpl: Optional[str], **kwargs: str) -> Optional[str]:
+    def _format_tmpl(self, tmpl: str | None, **kwargs: str) -> str | None:
         if tmpl is None:
             return None
 
@@ -77,12 +78,12 @@ class GhReleaseInstall:
         return str(tmpl).format(**kwargs)
 
     @template_property
-    def asset(self) -> Optional[str]:
+    def asset(self) -> str | None:
         return self._format_tmpl(self._tmpls["asset"])
 
     @template_property
     def destination(self) -> Path:
-        destination = Path(self._format_tmpl(self._tmpls["destination"]))
+        destination = Path(self._format_tmpl(self._tmpls["destination"]))  # type: ignore
 
         if destination.is_dir():
             return destination / self.asset
@@ -90,11 +91,11 @@ class GhReleaseInstall:
         return destination
 
     @template_property
-    def extract(self) -> Optional[str]:
+    def extract(self) -> str | None:
         return self._format_tmpl(self._tmpls["extract"])
 
     @template_property
-    def version_file(self) -> Optional[Path]:
+    def version_file(self) -> Path | None:
         version_file = self._format_tmpl(
             self._tmpls["version_file"],
             destination=self.destination,
