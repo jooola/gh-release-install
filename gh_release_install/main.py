@@ -1,11 +1,11 @@
 import sys
-from os import PathLike
+from os import PathLike, environ
 from pathlib import Path
 from shutil import move, unpack_archive
 from tempfile import TemporaryDirectory
 from typing import Dict, Optional
 
-import requests
+from requests import Session
 
 from .unpack import register_unpack_formats
 from .utils import Log
@@ -35,6 +35,8 @@ class GhReleaseInstall:
     # Used for template properties
     _tmpls: Dict[str, str] = {}
 
+    _session: Session
+
     # pylint: disable=too-many-arguments
     def __init__(
         self,
@@ -52,6 +54,11 @@ class GhReleaseInstall:
         self.extract = extract
         self.version = version
         self.version_file = version_file
+
+        self._session = Session()
+        if "GITHUB_TOKEN" in environ:
+            github_token = environ.get("GITHUB_TOKEN")
+            self._session.headers.update({"Authorization": f"token {github_token}"})
 
         Log.set_level(verbosity)
         Log.debug(f"Verbosity is set to '{Log.level}'.")
@@ -103,7 +110,7 @@ class GhReleaseInstall:
             url = f"https://api.github.com/repos/{self.repository}/releases/latest"
 
             Log.debug(f"Calling '{url}'.")
-            res = requests.get(url)
+            res = self._session.get(url)
             res.raise_for_status()
             Log.debug(f"{res.request.method} {res.request.url} {res.status_code}")
 
@@ -138,7 +145,7 @@ class GhReleaseInstall:
         )
 
         Log.debug(f"Calling '{url}'.")
-        res = requests.get(url, stream=True)
+        res = self._session.get(url, stream=True)
         res.raise_for_status()
         Log.debug(f"{res.request.method} {res.request.url} {res.status_code}")
 
