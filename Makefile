@@ -10,7 +10,7 @@ POETRY = $(POETRY_HOME)/venv/bin/poetry
 
 $(POETRY):
 	mkdir -p $(POETRY_HOME)
-	curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py > $(POETRY_HOME)/install-poetry.py
+	curl -sSL https://install.python-poetry.org > $(POETRY_HOME)/install-poetry.py
 	POETRY_HOME=$(POETRY_HOME) python3 $(POETRY_HOME)/install-poetry.py --yes
 
 setup: $(POETRY)
