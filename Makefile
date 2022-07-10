@@ -1,39 +1,42 @@
-.PHONY: setup format lint test e2e run-example
+.PHONY: install format lint test e2e run-example
 
 SHELL = bash
 CPU_CORES = $(shell nproc)
 
-MODULE = gh_release_install
+all: install format lint test
 
 install-poetry:
 	curl -sSL https://install.python-poetry.org | python3 -
 
-install:
-	poetry install
+POETRY_VIRTUALENVS_IN_PROJECT = true
 
-format:
+INSTALL_STAMP := .installed
+install: $(INSTALL_STAMP)
+$(INSTALL_STAMP):
+	poetry install
+	touch $(INSTALL_STAMP)
+
+format: install
 	poetry run black .
 	poetry run isort --profile black .
 
-lint:
+lint: install
 	poetry run black . --diff --check
-	poetry run pylint $(MODULE) tests
-	poetry run mypy $(MODULE) tests || true
+	poetry run pylint gh_release_install tests
+	poetry run mypy gh_release_install tests || true
 
-test:
-	poetry run pytest -n $(CPU_CORES) --color=yes -v --cov=$(MODULE) tests
+test: install
+	poetry run pytest -n $(CPU_CORES) --color=yes -v --cov=gh_release_install tests
 
-e2e:
-	poetry run pytest -n $(CPU_CORES) --color=yes -v --cov=$(MODULE) e2e
+e2e: install
+	poetry run pytest -n $(CPU_CORES) --color=yes -v --cov=gh_release_install e2e
 
-run-example:
+run-example: install
 	poetry run gh-release-install -vv \
 		'grafana/loki' \
 		'loki-linux-amd64.zip' --extract 'loki-linux-amd64' \
 		'./loki' \
 		--version 'latest' --version-file '{destination}.version'
 
-ci-publish:
+ci-publish: install
 	poetry publish --no-interaction --build
-
-all: install format lint test

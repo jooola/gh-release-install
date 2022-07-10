@@ -41,7 +41,6 @@ trap 'e=$?; git stash pop --quiet; exit $e' EXIT
 
 git clean -xdf
 
-make setup || error "setup project failed!"
 make lint || error "linting project failed!"
 make test || error "testing project failed!"
 make e2e || error "testing project e2e failed!"
