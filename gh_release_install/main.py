@@ -56,13 +56,14 @@ class GhReleaseInstall:
         self.version = version
         self.version_file = version_file
 
-        self._session = Session()
-        if "GITHUB_TOKEN" in environ:
-            github_token = environ.get("GITHUB_TOKEN")
-            self._session.headers.update({"Authorization": f"token {github_token}"})
-
         Log.set_level(verbosity)
         Log.debug(f"Verbosity is set to '{Log.level}'.")
+
+        self._session = Session()
+        if "GITHUB_TOKEN" in environ:
+            Log.debug("Loading GITHUB_TOKEN from env.")
+            github_token = environ.get("GITHUB_TOKEN")
+            self._session.headers.update({"Authorization": f"token {github_token}"})
 
         register_unpack_formats()
 
