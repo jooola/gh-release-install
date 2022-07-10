@@ -1,0 +1,24 @@
+name: Setup python
+description: Setup python, poetry and caching
+
+inputs:
+  python-version:
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/setup-python@v4
+      with:
+        python-version: ${{ inputs.python-version }}
+
+    - uses: snok/install-poetry@v1
+      with:
+        virtualenvs-in-project: true
+
+    - uses: actions/cache@v3
+      with:
+        path: ${{ env.POETRY_CACHE_DIR }}
+        key: ${{ runner.os }}-poetry-v1-${{ hashFiles('poetry.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-poetry-v1-
