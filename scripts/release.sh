@@ -46,11 +46,11 @@ make test || error "testing project failed!"
 make e2e || error "testing project e2e failed!"
 
 new_tag="v$pkg_version"
-release="Release $new_tag"
+release="release $new_tag"
 
 git stash pop --quiet
 git add "$pyproject" || error "could not stage $pyproject!"
-git commit -m "$release" --no-verify || error "could not commit the version bump!"
+git commit -m "chore: $release" --no-verify || error "could not commit the version bump!"
 git tag "$new_tag" -a -m "$release" || error "could not tag the version bump!"
 
 echo "Run 'git push --follow-tags' in order to publish the release on Github!"
