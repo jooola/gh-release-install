@@ -1,7 +1,7 @@
 .PHONY: install format lint test e2e run-example
 
 SHELL = bash
-CPU_CORES = $(shell nproc)
+CPU_CORES = $$(( $(shell nproc) > 4 ? 4 : $(shell nproc) ))
 
 all: install format lint test
 
