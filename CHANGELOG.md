@@ -1,3 +1,11 @@
+<a name="v0.7.0"></a>
+
+## [v0.7.0](https://github.com/jooola/gh-release-install/compare/v0.6.2...v0.7.0) (2022-09-16)
+
+### :rocket: Features
+
+- replace custom logger with logging
+
 <a name="v0.6.2"></a>
 
 ## [v0.6.2](https://github.com/jooola/gh-release-install/compare/v0.6.1...v0.6.2) (2022-07-20)
