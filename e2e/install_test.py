@@ -15,7 +15,6 @@ def test_installer_run_node_exporter(tmp_path):
         destination=destination_file,
         version="v1.2.2",
         version_file="{destination}.version",
-        verbosity=2,
     )
 
     installer.run()
@@ -42,7 +41,6 @@ def test_installer_run_shfmt(tmp_path):
         destination=destination_file,
         version="v3.3.1",
         version_file="{destination}.version",
-        verbosity=2,
     )
 
     installer.run()
@@ -66,7 +64,6 @@ def test_installer_run_shfmt_install_to_dir(tmp_path):
         destination=destination_dir,
         version="v3.3.1",
         version_file="{destination}.version",
-        verbosity=2,
     )
 
     installer.run()
@@ -88,7 +85,6 @@ def test_installer_run_loki(tmp_path):
         asset="loki-linux-amd64.zip",
         extract="loki-linux-amd64",
         destination=destination_file,
-        verbosity=2,
         version="v2.2.1",
     )
 
@@ -115,7 +111,6 @@ def test_installer_run_restic(tmp_path):
         extract="restic_{version}_linux_amd64",
         destination=destination_file,
         version="v0.12.1",
-        verbosity=2,
     )
 
     installer.run()

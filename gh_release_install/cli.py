@@ -1,11 +1,13 @@
 from __future__ import annotations
 
+import logging
 import sys
 
 import click
 
 from gh_release_install import GhReleaseInstall
-from gh_release_install.utils import Log
+
+logger = logging.getLogger(__name__)
 
 
 @click.command()
@@ -33,7 +35,7 @@ from gh_release_install.utils import Log
     "--verbose",
     "verbosity",
     count=True,
-    type=click.IntRange(0, 2),
+    type=click.IntRange(-1, 2),
     default=0,
     help="Increase verbosity.",
 )
@@ -134,6 +136,13 @@ def run(
         --version-filename '{destination}.version'
 
     """
+    if verbosity is not None and verbosity >= 0:
+        levels = [logging.ERROR, logging.INFO, logging.DEBUG]
+        logging.basicConfig(
+            level=levels[max(verbosity, 2)],
+            format="%(levelname)s:\t%(message)s",
+        )
+
     installer = GhReleaseInstall(
         repository=repository,
         asset=asset,
@@ -141,12 +150,11 @@ def run(
         extract=extract,
         version=version,
         version_file=version_file,
-        verbosity=verbosity,
     )
 
     try:
         installer.run()
     # pylint: disable=broad-except
     except Exception as exception:
-        Log.error(exception)
+        logger.exception(exception)
         sys.exit(1)

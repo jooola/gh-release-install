@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 import sys
 from os import environ
 from pathlib import Path
@@ -9,9 +10,11 @@ from tempfile import TemporaryDirectory
 from requests import Session
 
 from .unpack import register_unpack_formats
-from .utils import Log
 
 LATEST_VERSION = "latest"
+
+logger = logging.getLogger(__name__)
+logger.addHandler(logging.NullHandler())
 
 
 def template_property(getter):
@@ -47,7 +50,6 @@ class GhReleaseInstall:
         extract: str | None = None,
         version: str = LATEST_VERSION,
         version_file: str | None = None,
-        verbosity: int | None = -1,  # Disable logs
     ):
         self.repository = repository
         self.asset = asset
@@ -56,12 +58,9 @@ class GhReleaseInstall:
         self.version = version
         self.version_file = version_file
 
-        Log.set_level(verbosity)
-        Log.debug(f"Verbosity is set to '{Log.level}'.")
-
         self._session = Session()
         if "GITHUB_TOKEN" in environ:
-            Log.debug("Loading GITHUB_TOKEN from env.")
+            logger.debug("Loading GITHUB_TOKEN from env")
             github_token = environ.get("GITHUB_TOKEN")
             self._session.headers.update({"Authorization": f"token {github_token}"})
 
@@ -107,25 +106,25 @@ class GhReleaseInstall:
         """
         If not provided, get latest tag/version from the Github repository.
         """
-        Log.debug(f"Requested '{self.version}' version.")
+        logger.debug(f"Requested '{self.version}' version")
         if self.version == LATEST_VERSION:
             url = f"https://api.github.com/repos/{self.repository}/releases/latest"
 
-            Log.debug(f"Calling '{url}'.")
+            logger.debug(f"Calling '{url}'.")
             res = self._session.get(url)
             res.raise_for_status()
-            Log.debug(f"{res.request.method} {res.request.url} {res.status_code}")
+            logger.debug(f"{res.request.method} {res.request.url} {res.status_code}")
 
             body = res.json()
 
             self._target_tag = body["tag_name"]
             self._target_version = body["tag_name"].strip("v")
-            Log.info(f"Latest version is '{self._target_version}'.")
+            logger.info(f"Latest version is '{self._target_version}'")
         else:
             self._target_tag = self.version
             self._target_version = self.version.strip("v")
 
-        Log.debug(f"Target version resolved to '{self._target_version}'.")
+        logger.debug(f"Target version resolved to '{self._target_version}'")
 
     def _get_local_version(self):
         """
@@ -135,7 +134,7 @@ class GhReleaseInstall:
             local_version = self.version_file.read_text()
             self._local_tag = local_version
             self._local_version = local_version.strip("v")
-            Log.debug(f"Local version resolved to '{self._local_version}'.")
+            logger.debug(f"Local version resolved to '{self._local_version}'")
 
     def _download_release_asset(self, tmp_dir: Path):
         """
@@ -146,14 +145,14 @@ class GhReleaseInstall:
             f"/{self.repository}/releases/download/{self._target_tag}/{self.asset}"
         )
 
-        Log.debug(f"Calling '{url}'.")
+        logger.debug(f"Calling '{url}'")
         res = self._session.get(url, stream=True)
         res.raise_for_status()
-        Log.debug(f"{res.request.method} {res.request.url} {res.status_code}")
+        logger.debug(f"{res.request.method} {res.request.url} {res.status_code}")
 
         tmp_file = tmp_dir / self.asset
 
-        Log.debug(f"Saving asset to '{tmp_file}'.")
+        logger.debug(f"Saving asset to '{tmp_file}'")
         with tmp_file.open("wb") as tmp_fd:
             for chunk in res.iter_content(chunk_size=256):
                 tmp_fd.write(chunk)
@@ -171,31 +170,31 @@ class GhReleaseInstall:
         self._get_target_version()
         self._get_local_version()
 
-        Log.debug(f"Target '{self._target_tag}' == Local '{self._local_tag}'")
+        logger.debug(f"Target '{self._target_tag}' == Local '{self._local_tag}'")
         if self._target_version == self._local_version:
-            Log.info("Target version is already installed, exiting...")
+            logger.info("Target version is already installed")
             sys.exit(0)
 
         with TemporaryDirectory(prefix="gh-release-installer") as tmp_dir:
             tmp_dir = Path(tmp_dir)
-            Log.info("Downloading asset...")
+            logger.info("Downloading asset")
             asset_file = self._download_release_asset(tmp_dir)
-            Log.debug(f"Downloaded asset to '{asset_file}'.")
+            logger.debug(f"Downloaded asset to '{asset_file}'")
 
             if self.extract is not None:
-                Log.info("Extracting archive...")
+                logger.info("Extracting archive")
                 asset_file = self._extract_release_asset(tmp_dir, asset_file)
-                Log.debug(f"Extracted archive to '{asset_file}'.")
+                logger.debug(f"Extracted archive to '{asset_file}'")
 
-            Log.info("Installing file...")
+            logger.info("Installing file")
             move(asset_file, self.destination)
             self.destination.chmod(0o755)
-            Log.debug(f"Installed file to '{self.destination}'.")
+            logger.debug(f"Installed file to '{self.destination}'")
 
         # Save to local tag/version file
         if self.version_file is not None:
-            Log.info("Saving version file...")
+            logger.info("Saving version file")
             self.version_file.write_text(self._target_tag)
-            Log.debug(f"Saved version file to '{self.version_file}'.")
+            logger.debug(f"Saved version file to '{self.version_file}'")
 
-        Log.info("Done")
+        logger.info("Done")
