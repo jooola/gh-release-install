@@ -47,6 +47,9 @@ disable = [
   "missing-class-docstring"
 ]
 
+[tool.pylint.format]
+disable = "logging-fstring-interpolation"
+
 [tool.isort]
 add_imports = [
   "from __future__ import annotations",
