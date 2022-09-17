@@ -139,7 +139,7 @@ def run(
     if verbosity is not None and verbosity >= 0:
         levels = [logging.ERROR, logging.INFO, logging.DEBUG]
         logging.basicConfig(
-            level=levels[max(verbosity, 2)],
+            level=levels[min(verbosity, 2)],
             format="%(levelname)s:\t%(message)s",
         )
 
