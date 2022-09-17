@@ -22,25 +22,6 @@ class ArgumentParserFormatter(
 
 parser = ArgumentParser(
     description="Install GitHub release file on your system.",
-    epilog="""
-template variables:
-    {tag}               Release tag name.
-    {version}           Release tag name without leading 'v'.
-    {destination}       DESTINATION path, including the asset filename if path
-                        is a directory.
-
-examples:
-    gh-release-install 'mvdan/sh' \\
-        'shfmt_{tag}_linux_amd64' \\
-        '/usr/local/bin/shfmt' \\
-        --version 'v3.3.1'
-
-    gh-release-install 'prometheus/prometheus' \\
-        'prometheus-{version}.linux-amd64.tar.gz' \\
-        --extract 'prometheus-{version}.linux-amd64/prometheus' \\
-        '/usr/local/bin/prometheus' \\
-        --version-file '{destination}.version'
-""",
     formatter_class=lambda prog: ArgumentParserFormatter(prog, width=80),
 )
 parser.add_argument(
@@ -96,6 +77,25 @@ parser.add_argument(
     const=-1,
     help="Disable logging.",
 )
+parser.epilog = """
+template variables:
+    {tag}               Release tag name.
+    {version}           Release tag name without leading 'v'.
+    {destination}       DESTINATION path, including the asset filename if path
+                        is a directory.
+
+examples:
+    gh-release-install 'mvdan/sh' \\
+        'shfmt_{tag}_linux_amd64' \\
+        '/usr/local/bin/shfmt' \\
+        --version 'v3.3.1'
+
+    gh-release-install 'prometheus/prometheus' \\
+        'prometheus-{version}.linux-amd64.tar.gz' \\
+        --extract 'prometheus-{version}.linux-amd64/prometheus' \\
+        '/usr/local/bin/prometheus' \\
+        --version-file '{destination}.version'
+"""
 
 
 def run():
