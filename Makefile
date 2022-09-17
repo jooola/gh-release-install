@@ -31,12 +31,8 @@ test: install
 e2e: install
 	poetry run pytest -n $(CPU_CORES) --color=yes -v --cov=gh_release_install e2e
 
-run-example: install
-	poetry run gh-release-install -vv \
-		'grafana/loki' \
-		'loki-linux-amd64.zip' --extract 'loki-linux-amd64' \
-		'./loki' \
-		--version 'latest' --version-file '{destination}.version'
+examples: install
+	poetry run ./examples.sh
 
 ci-publish: install
 	poetry publish --no-interaction --build
