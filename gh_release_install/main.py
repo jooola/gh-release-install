@@ -177,24 +177,18 @@ class GhReleaseInstall:
 
         with TemporaryDirectory(prefix="gh-release-installer") as tmp_dir:
             tmp_dir = Path(tmp_dir)
-            logger.info("Downloading asset")
             asset_file = self._download_release_asset(tmp_dir)
-            logger.debug(f"Downloaded asset to '{asset_file}'")
+            logger.info(f"Downloaded asset to '{asset_file}'")
 
             if self.extract is not None:
-                logger.info("Extracting archive")
                 asset_file = self._extract_release_asset(tmp_dir, asset_file)
-                logger.debug(f"Extracted archive to '{asset_file}'")
+                logger.info(f"Extracted archive to '{asset_file}'")
 
-            logger.info("Installing file")
             move(asset_file, self.destination)
             self.destination.chmod(0o755)
-            logger.debug(f"Installed file to '{self.destination}'")
+            logger.info(f"Installed file to '{self.destination}'")
 
         # Save to local tag/version file
         if self.version_file is not None:
-            logger.info("Saving version file")
             self.version_file.write_text(self._target_tag)
-            logger.debug(f"Saved version file to '{self.version_file}'")
-
-        logger.info("Done")
+            logger.info(f"Saved version file to '{self.version_file}'")
