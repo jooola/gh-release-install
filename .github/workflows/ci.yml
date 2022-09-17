@@ -54,6 +54,7 @@ jobs:
       - run: make install
       - run: make test
       - run: make e2e
+      - run: make examples
 
   publish:
     needs: test
