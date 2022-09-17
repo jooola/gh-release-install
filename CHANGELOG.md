@@ -1,3 +1,22 @@
+<a name="v0.8.0"></a>
+
+## [v0.8.0](https://github.com/jooola/gh-release-install/compare/v0.7.0...v0.8.0) (2022-09-17)
+
+### :bug: Bug Fixes
+
+- allow older version of requests
+- reduce logging
+- verbosity forced to debug when enabled
+
+### :gear: CI/CD
+
+- widen python dependencies range
+- run tests on examples
+
+### :rocket: Features
+
+- replace click with argparse
+
 <a name="v0.7.0"></a>
 
 ## [v0.7.0](https://github.com/jooola/gh-release-install/compare/v0.6.2...v0.7.0) (2022-09-16)
