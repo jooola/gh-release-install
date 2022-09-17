@@ -2,154 +2,119 @@ from __future__ import annotations
 
 import logging
 import sys
-
-import click
+from argparse import (
+    ArgumentDefaultsHelpFormatter,
+    ArgumentParser,
+    RawDescriptionHelpFormatter,
+)
 
 from gh_release_install import GhReleaseInstall
 
 logger = logging.getLogger(__name__)
 
 
-@click.command()
-@click.argument("repository")
-@click.argument("asset")
-@click.option(
-    "--extract",
-    metavar="<filename>",
-    help="Archive member to extract.",
-)
-@click.argument("destination")
-@click.option(
-    "--version",
-    default="latest",
-    metavar="<version>",
-    help="Release version to install.",
-)
-@click.option(
-    "--version-file",
-    metavar="<filename>",
-    help="File to track the version installed.",
-)
-@click.option(
-    "-v",
-    "--verbose",
-    "verbosity",
-    count=True,
-    type=click.IntRange(-1, 2),
-    default=0,
-    help="Increase verbosity.",
-)
-@click.option(
-    "-q",
-    "--quiet",
-    "verbosity",
-    flag_value=-1,
-    help="Disable logging.",
-)
-# pylint: disable=too-many-arguments
-def run(
-    repository: str,
-    asset: str,
-    extract: str,
-    destination: str,
-    version: str,
-    version_file: str,
-    verbosity: int,
+class ArgumentParserFormatter(
+    RawDescriptionHelpFormatter,
+    ArgumentDefaultsHelpFormatter,
 ):
-    """
-    Install GitHub release file on your system.
+    pass
 
-    The REPOSITORY argument define the Github REPOSITORY org/repo to get the
-    release from.
 
-    \b
-    Examples:
-        mvdan/sh
-        prometheus/prometheus
+parser = ArgumentParser(
+    description="Install GitHub release file on your system.",
+    epilog="""
+template variables:
+    {tag}               Release tag name.
+    {version}           Release tag name without leading 'v'.
+    {destination}       DESTINATION path, including the asset filename if path
+                        is a directory.
 
-    The ASSET argument define the release ASSET filename. Note that ASSET may contain
-    variables such as '{version}' or '{tag}'.
-
-    \b
-    Examples:
-        shfmt_{tag}_linux_amd64
-        prometheus-{version}.linux-amd64.tar.gz
-
-    The DESTINATION argument define the DESTINATION path for the downloaded
-    file. If DESTINATION is a directory, then the asset name will be written as
-    the file name in the directory. Note that DESTINATION may contain variables
-    such as '{version}' or '{tag}'.
-
-    \b
-    Examples:
-        /usr/local/bin/shfmt
-        /opt/prometheus/prometheus
-
-    If the release asset is an archive, use the --extract flag to
-    extract the <filename> from the archive and install the extracted
-    file instead. Note that <filename> may contain variables such as '{version}' or '{tag}'.
-
-    \b
-    Examples:
-        --extract prometheus-{version}.linux-amd64/prometheus
-
-    To install a specific version, use the --version flag to set the desired version.
-    With 'latest' the installer will ask the Github API to find the latest version.
-    The default is 'latest'.
-
-    \b
-    Examples:
-        latest
-        v2.28.1
-
-    To track the version installed on the system, use the --version-file flag to
-    define the <filename> where the version should be saved.
-    The default is not to save this version file.
-    Note that <filename> may contain variables such as '{destination}'. Also
-    note that '{destination}' is the full path, including filename, to the
-    asset (even if DESTINATION provided in the commandline is a directory).
-
-    \b
-    Examples:
-        --version-file /opt/versions/prometheus.version
-        --version-file {destination}.version
-
-    Increase the verbosity using the --verbose flag. To disable logging set the --quiet
-    flag. The default verbosity is 'error'. Those are the different log levels 'quiet',
-    'error', 'info', 'debug'.
-
-    Some full examples:
-
-    \b
-    gh-release-install \\
-        'mvdan/sh' \\
+examples:
+    gh-release-install 'mvdan/sh' \\
         'shfmt_{tag}_linux_amd64' \\
         '/usr/local/bin/shfmt' \\
         --version 'v3.3.1'
 
-    \b
-    gh-release-install \\
-        'prometheus/prometheus' \\
+    gh-release-install 'prometheus/prometheus' \\
         'prometheus-{version}.linux-amd64.tar.gz' \\
         --extract 'prometheus-{version}.linux-amd64/prometheus' \\
         '/usr/local/bin/prometheus' \\
-        --version-filename '{destination}.version'
+        --version-file '{destination}.version'
+""",
+    formatter_class=lambda prog: ArgumentParserFormatter(prog, width=80),
+)
+parser.add_argument(
+    "repository",
+    metavar="REPOSITORY",
+    help="Github REPOSITORY org/repo to get the release from.",
+)
+parser.add_argument(
+    "asset",
+    metavar="ASSET",
+    help="Release ASSET filename. May contain variables such as '{version}' or '{tag}'.",
+)
+parser.add_argument(
+    "--extract",
+    metavar="<filename>",
+    help="""Extract the <filename> from the release asset archive and install the
+            extracted file instead. May contain variables such as '{version}' or
+            '{tag}'.""",
+)
+parser.add_argument(
+    "destination",
+    metavar="DESTINATION",
+    help="""Path to save the downloaded file. If DESTINATION is a directory, the asset
+            name will be used as filename in that directory. May contain variables such
+            as '{version}' or '{tag}'.""",
+)
+parser.add_argument(
+    "--version",
+    default="latest",
+    metavar="<version>",
+    help="""Desired release version to install. When using 'latest' the installer will
+            guess the latest version from the Github API.""",
+)
+parser.add_argument(
+    "--version-file",
+    metavar="<filename>",
+    help="""Track the version installed on the system using a file. May contain
+            variables such as '{destination}'.""",
+)
+parser.add_argument(
+    "-v",
+    "--verbose",
+    dest="verbosity",
+    action="count",
+    default=0,
+    help="Increase the verbosity.",
+)
+parser.add_argument(
+    "-q",
+    "--quiet",
+    dest="verbosity",
+    action="store_const",
+    const=-1,
+    help="Disable logging.",
+)
 
-    """
-    if verbosity is not None and verbosity >= 0:
+
+def run():
+    args = parser.parse_args()
+
+    if args.verbosity is not None and args.verbosity >= 0:
         levels = [logging.ERROR, logging.INFO, logging.DEBUG]
         logging.basicConfig(
-            level=levels[min(verbosity, 2)],
+            level=levels[min(args.verbosity, 2)],
             format="%(levelname)s:\t%(message)s",
         )
 
     installer = GhReleaseInstall(
-        repository=repository,
-        asset=asset,
-        destination=destination,
-        extract=extract,
-        version=version,
-        version_file=version_file,
+        repository=args.repository,
+        asset=args.asset,
+        destination=args.destination,
+        extract=args.extract,
+        version=args.version,
+        version_file=args.version_file,
     )
 
     try:
