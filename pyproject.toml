@@ -23,7 +23,6 @@ gh-release-install = "gh_release_install.cli:run"
 [tool.poetry.dependencies]
 python = "^3.7"
 requests = "^2.26.0"
-click = "^8.1.3"
 
 [tool.poetry.dev-dependencies]
 black = "^22.6.0"

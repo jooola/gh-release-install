@@ -59,83 +59,52 @@ gh-release-install --help
 ## Usage
 
 ```sh
-Usage: gh-release-install [OPTIONS] REPOSITORY ASSET DESTINATION
+usage: gh-release-install [-h] [--extract <filename>] [--version <version>]
+                          [--version-file <filename>] [-v] [-q]
+                          REPOSITORY ASSET DESTINATION
 
-  Install GitHub release file on your system.
+Install GitHub release file on your system.
 
-  The REPOSITORY argument define the Github REPOSITORY org/repo to get the
-  release from.
+positional arguments:
+  REPOSITORY            Github REPOSITORY org/repo to get the release from.
+  ASSET                 Release ASSET filename. May contain variables such as
+                        '{version}' or '{tag}'.
+  DESTINATION           Path to save the downloaded file. If DESTINATION is a
+                        directory, the asset name will be used as filename in
+                        that directory. May contain variables such as
+                        '{version}' or '{tag}'.
 
-  Examples:
-      mvdan/sh
-      prometheus/prometheus
+optional arguments:
+  -h, --help            show this help message and exit
+  --extract <filename>  Extract the <filename> from the release asset archive
+                        and install the extracted file instead. May contain
+                        variables such as '{version}' or '{tag}'. (default:
+                        None)
+  --version <version>   Desired release version to install. When using 'latest'
+                        the installer will guess the latest version from the
+                        Github API. (default: latest)
+  --version-file <filename>
+                        Track the version installed on the system using a file.
+                        May contain variables such as '{destination}'. (default:
+                        None)
+  -v, --verbose         Increase the verbosity. (default: 0)
+  -q, --quiet           Disable logging. (default: None)
 
-  The ASSET argument define the release ASSET filename. Note that ASSET may
-  contain variables such as '{version}' or '{tag}'.
+template variables:
+    {tag}               Release tag name.
+    {version}           Release tag name without leading 'v'.
+    {destination}       DESTINATION path, including the asset filename if path
+                        is a directory.
 
-  Examples:
-      shfmt_{tag}_linux_amd64
-      prometheus-{version}.linux-amd64.tar.gz
+examples:
+    gh-release-install 'mvdan/sh' \
+        'shfmt_{tag}_linux_amd64' \
+        '/usr/local/bin/shfmt' \
+        --version 'v3.3.1'
 
-  The DESTINATION argument define the DESTINATION path for the downloaded
-  file. If DESTINATION is a directory, then the asset name will be written as
-  the file name in the directory. Note that DESTINATION may contain variables
-  such as '{version}' or '{tag}'.
-
-  Examples:
-      /usr/local/bin/shfmt
-      /opt/prometheus/prometheus
-
-  If the release asset is an archive, use the --extract flag to extract the
-  <filename> from the archive and install the extracted file instead. Note
-  that <filename> may contain variables such as '{version}' or '{tag}'.
-
-  Examples:
-      --extract prometheus-{version}.linux-amd64/prometheus
-
-  To install a specific version, use the --version flag to set the desired
-  version. With 'latest' the installer will ask the Github API to find the
-  latest version. The default is 'latest'.
-
-  Examples:
-      latest
-      v2.28.1
-
-  To track the version installed on the system, use the --version-file flag to
-  define the <filename> where the version should be saved.
-  The default is not to save this version file.
-  Note that <filename> may contain variables such as '{destination}'. Also note
-  that '{destination}' is the full path, including filename, to the asset (even
-  if DESTINATION provided in the commandline is a directory).
-
-  Examples:
-      --version-file /opt/versions/prometheus.version
-      --version-file {destination}.version
-
-  Increase the verbosity using the --verbose flag. To disable logging set the
-  --quiet flag. The default verbosity is 'error'. Those are the different log
-  levels 'quiet', 'error', 'info', 'debug'.
-
-  Some full examples:
-
-  gh-release-install \
-      'mvdan/sh' \
-      'shfmt_{tag}_linux_amd64' \
-      '/usr/local/bin/shfmt' \
-      --version 'v3.3.1'
-
-  gh-release-install \
-      'prometheus/prometheus' \
-      'prometheus-{version}.linux-amd64.tar.gz' \
-      --extract 'prometheus-{version}.linux-amd64/prometheus' \
-      '/usr/local/bin/prometheus' \
-      --version-filename '{destination}.version'
-
-Options:
-  --extract <filename>       Archive member to extract.
-  --version <version>        Release version to install.
-  --version-file <filename>  File to track the version installed.
-  -v, --verbose              Increase verbosity.  [0<=x<=2]
-  -q, --quiet                Disable logging.
-  --help                     Show this message and exit.
+    gh-release-install 'prometheus/prometheus' \
+        'prometheus-{version}.linux-amd64.tar.gz' \
+        --extract 'prometheus-{version}.linux-amd64/prometheus' \
+        '/usr/local/bin/prometheus' \
+        --version-file '{destination}.version'
 ```
