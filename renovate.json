@@ -12,6 +12,10 @@
     {
       "matchUpdateTypes": ["patch"],
       "automerge": true
+    },
+    {
+      "matchManagers": ["poetry"],
+      "rangeStrategy": "widen"
     }
   ]
 }
