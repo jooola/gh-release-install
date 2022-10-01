@@ -23,7 +23,7 @@ format: install
 lint: install
 	poetry run black . --diff --check
 	poetry run pylint gh_release_install tests
-	poetry run mypy gh_release_install tests || true
+	poetry run mypy gh_release_install tests
 
 test: install
 	poetry run pytest -n $(CPU_CORES) --color=yes -v --cov=gh_release_install tests
