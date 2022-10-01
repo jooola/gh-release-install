@@ -154,7 +154,7 @@ class GhReleaseInstall:
 
         logger.debug(f"Saving asset to '{tmp_file}'")
         with tmp_file.open("wb") as tmp_fd:
-            for chunk in res.iter_content(chunk_size=256):
+            for chunk in res.iter_content(chunk_size=2048):
                 tmp_fd.write(chunk)
 
         return tmp_file
