@@ -113,12 +113,8 @@ class GhReleaseInstall:
         if self.version == LATEST_VERSION:
             url = f"https://api.github.com/repos/{self.repository}/releases/latest"
 
-            logger.debug(f"Calling '{url}'.")
             with self._session.get(url) as res:
                 res.raise_for_status()
-                logger.debug(
-                    f"{res.request.method} {res.request.url} {res.status_code}"
-                )
                 body = res.json()
 
             self._target_tag = body["tag_name"]
@@ -145,12 +141,8 @@ class GhReleaseInstall:
         Download target version release file in a temporary file.
         """
         url = self._github_asset_url(self.asset)
-
-        logger.debug(f"Calling '{url}'")
         with self._session.get(url, stream=True) as res:
             res.raise_for_status()
-            logger.debug(f"{res.request.method} {res.request.url} {res.status_code}")
-
             tmp_file = tmp_dir / self.asset
 
             logger.debug(f"Saving asset to '{tmp_file}'")
