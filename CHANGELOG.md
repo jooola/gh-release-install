@@ -1,3 +1,18 @@
+<a name="v0.9.0"></a>
+
+## [v0.9.0](https://github.com/jooola/gh-release-install/compare/v0.8.0...v0.9.0) (2022-10-01)
+
+### :bug: Bug Fixes
+
+- only export GhReleaseInstall
+- add docker entrypoint
+- reduce docker image size
+
+### :rocket: Features
+
+- allow checksum verification
+- use python3-alpine variant
+
 <a name="v0.8.0"></a>
 
 ## [v0.8.0](https://github.com/jooola/gh-release-install/compare/v0.7.0...v0.8.0) (2022-09-17)
