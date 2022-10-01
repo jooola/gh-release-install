@@ -102,6 +102,9 @@ class GhReleaseInstall:
         )
         return Path(version_file) if version_file is not None else None
 
+    def _github_asset_url(self, asset: str) -> str:
+        return f"https://github.com/{self.repository}/releases/download/{self._target_tag}/{asset}"
+
     def _get_target_version(self):
         """
         If not provided, get latest tag/version from the Github repository.
@@ -140,10 +143,7 @@ class GhReleaseInstall:
         """
         Download target version release file in a temporary file.
         """
-        url = (
-            "https://github.com"
-            f"/{self.repository}/releases/download/{self._target_tag}/{self.asset}"
-        )
+        url = self._github_asset_url(self.asset)
 
         logger.debug(f"Calling '{url}'")
         res = self._session.get(url, stream=True)
