@@ -9,6 +9,12 @@ from tempfile import TemporaryDirectory
 
 from requests import Session
 
+from .checksum import (
+    compute_file_checksum,
+    find_checksum_in_file,
+    is_hexdigest,
+    parse_checksum_option,
+)
 from .unpack import register_unpack_formats
 
 __all__ = ["GhReleaseInstall"]
@@ -53,6 +59,7 @@ class GhReleaseInstall:
         extract: str | None = None,
         version: str = LATEST,
         version_file: str | None = None,
+        checksum: str | None = None,
     ):
         self._repository = repository
         self._asset = asset
@@ -60,6 +67,10 @@ class GhReleaseInstall:
         self._extract = extract
         self._version = version
         self._version_file = version_file
+
+        self.checksum_algorithm, self.checksum = None, None
+        if checksum is not None:
+            self.checksum_algorithm, self.checksum = parse_checksum_option(checksum)
 
         self._session = Session()
         if "GITHUB_TOKEN" in environ:
@@ -130,6 +141,35 @@ class GhReleaseInstall:
             self._local = Release(self.version_file.read_text(encoding="utf-8"))
             logger.debug(f"Local version is '{self._local.version}'")
 
+    def _get_checksum_from_url(self, url: str) -> str | None:
+        """
+        Download checksum file from the provided url and extract the checksum.
+        """
+        with self._session.get(url) as res:
+            if res.status_code == 404:
+                return None
+            res.raise_for_status()
+
+            return find_checksum_in_file(res.text, self.asset)
+
+    def _verify_checksum(self, asset_file: Path) -> bool:
+        """
+        Verify asset checksum, first check against a possible hand written digest,
+        then check against a digest from a asset checksum file.
+        """
+        assert self.checksum is not None
+        assert self.checksum_algorithm is not None
+
+        local_checksum = compute_file_checksum(self.checksum_algorithm, asset_file)
+
+        # We hope nobody will ever pass a asset filename that matches this check
+        if is_hexdigest(self.checksum_algorithm, self.checksum):
+            return local_checksum == self.checksum
+
+        target_checksum_url = self._github_asset_url(self.checksum)
+        target_checksum = self._get_checksum_from_url(target_checksum_url)
+        return local_checksum == target_checksum
+
     def _download_release_asset(self, tmp_dir: Path):
         """
         Download target version release file in a temporary file.
@@ -166,7 +206,12 @@ class GhReleaseInstall:
         with TemporaryDirectory(prefix="gh-release-installer") as tmp_dir:
             tmp_dir = Path(tmp_dir)
             asset_file = self._download_release_asset(tmp_dir)
-            logger.info(f"Downloaded asset to '{asset_file}'")
+
+            if self.checksum is not None:
+                if not self._verify_checksum(asset_file):
+                    logger.error("Checksum verification failed")
+                    sys.exit(1)
+                logger.info("Checksum verification succeeded")
 
             if self.extract is not None:
                 asset_file = self._extract_release_asset(tmp_dir, asset_file)
