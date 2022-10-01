@@ -9,6 +9,7 @@ from argparse import (
 )
 
 from gh_release_install import GhReleaseInstall
+from gh_release_install.checksum import HASH_ALGORITHM
 
 logger = logging.getLogger(__name__)
 
@@ -62,6 +63,13 @@ parser.add_argument(
             variables such as '{destination}'.""",
 )
 parser.add_argument(
+    "--checksum",
+    metavar="<hash>:<digest|asset>",
+    help=f"""Asset checksum used to verify the downloaded ASSET. <hash> can be one of
+             {', '.join(HASH_ALGORITHM)}. <digest|asset> can either be the expected
+             checksum, or the filename of an checksum file in the release assets.""",
+)
+parser.add_argument(
     "-v",
     "--verbose",
     dest="verbosity",
@@ -94,7 +102,8 @@ examples:
         'prometheus-{version}.linux-amd64.tar.gz' \\
         --extract 'prometheus-{version}.linux-amd64/prometheus' \\
         '/usr/local/bin/prometheus' \\
-        --version-file '{destination}.version'
+        --version-file '{destination}.version' \\
+        --checksum 'sha256:sha256sums.txt'
 """
 
 
@@ -115,6 +124,7 @@ def run():
         extract=args.extract,
         version=args.version,
         version_file=args.version_file,
+        checksum=args.checksum,
     )
 
     try:

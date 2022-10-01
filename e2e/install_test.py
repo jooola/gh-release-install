@@ -134,3 +134,26 @@ def test_installer_to_dir(  # pylint: disable=unused-argument
     assert installer.destination.exists()
     assert installer.destination.is_file()
     assert get_version(installer.destination, version_command) == version_output
+
+
+@pytest.mark.parametrize(PARAMS_ARGS, PARAMS)
+def test_installer_with_checksum(
+    tmp_path: Path,
+    destination,
+    checksum,
+    kwargs,
+    version_command,
+    version_output,
+):
+    if checksum is None:
+        pytest.skip()
+
+    kwargs["checksum"] = checksum
+    test_installer(
+        tmp_path,
+        destination,
+        checksum,
+        kwargs,
+        version_command,
+        version_output,
+    )
