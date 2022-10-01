@@ -11,6 +11,8 @@ from requests import Session
 
 from .unpack import register_unpack_formats
 
+__all__ = ["GhReleaseInstall"]
+
 LATEST = "latest"
 
 logger = logging.getLogger(__name__)
