@@ -114,11 +114,12 @@ class GhReleaseInstall:
             url = f"https://api.github.com/repos/{self.repository}/releases/latest"
 
             logger.debug(f"Calling '{url}'.")
-            res = self._session.get(url)
-            res.raise_for_status()
-            logger.debug(f"{res.request.method} {res.request.url} {res.status_code}")
-
-            body = res.json()
+            with self._session.get(url) as res:
+                res.raise_for_status()
+                logger.debug(
+                    f"{res.request.method} {res.request.url} {res.status_code}"
+                )
+                body = res.json()
 
             self._target_tag = body["tag_name"]
             self._target_version = body["tag_name"].strip("v")
@@ -146,16 +147,16 @@ class GhReleaseInstall:
         url = self._github_asset_url(self.asset)
 
         logger.debug(f"Calling '{url}'")
-        res = self._session.get(url, stream=True)
-        res.raise_for_status()
-        logger.debug(f"{res.request.method} {res.request.url} {res.status_code}")
+        with self._session.get(url, stream=True) as res:
+            res.raise_for_status()
+            logger.debug(f"{res.request.method} {res.request.url} {res.status_code}")
 
-        tmp_file = tmp_dir / self.asset
+            tmp_file = tmp_dir / self.asset
 
-        logger.debug(f"Saving asset to '{tmp_file}'")
-        with tmp_file.open("wb") as tmp_fd:
-            for chunk in res.iter_content(chunk_size=2048):
-                tmp_fd.write(chunk)
+            logger.debug(f"Saving asset to '{tmp_file}'")
+            with tmp_file.open("wb") as tmp_fd:
+                for chunk in res.iter_content(chunk_size=2048):
+                    tmp_fd.write(chunk)
 
         return tmp_file
 
