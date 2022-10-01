@@ -21,7 +21,7 @@ def _unpack_bz2(filename, extract_dir):
 
 def register_unpack_formats():
     """Register custom unpack formats."""
-    logger.debug("Registering custom unpack formats.")
+    logger.debug("Registering custom unpack formats")
 
     formats = get_unpack_formats()
     if "bz2" not in map(lambda x: x[0], formats):
