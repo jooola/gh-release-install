@@ -14,3 +14,5 @@ ENV PYTHONUNBUFFERED=1
 COPY --from=builder dist/gh_release_install*.whl .
 RUN pip --no-cache-dir install --no-compile gh_release_install*.whl \
     && rm gh_release_install*.whl
+
+ENTRYPOINT [ "/usr/local/bin/gh-release-install" ]
