@@ -11,34 +11,35 @@ from requests import Session
 
 from .unpack import register_unpack_formats
 
-LATEST_VERSION = "latest"
+LATEST = "latest"
 
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
 
 
-def template_property(getter):
-    """
-    template_property store the content in shared dict '_tmpls'.
-    """
+# pylint: disable=too-few-public-methods
+class Release:
+    def __init__(self, tag: str) -> None:
+        self.tag = tag
 
-    def setter(self, value):
-        # pylint: disable=protected-access
-        self._tmpls[getter.__name__] = value
+    @property
+    def version(self) -> str:
+        return self.tag.strip("v")
 
-    return property(fget=getter, fset=setter)
+
+def get_latest_tag(session: Session, repository: str) -> str:
+    url = f"https://api.github.com/repos/{repository}/releases/latest"
+    with session.get(url) as res:
+        res.raise_for_status()
+        body = res.json()
+
+    return body["tag_name"]
 
 
 # pylint: disable=too-many-instance-attributes
 class GhReleaseInstall:
-    _local_tag: str | None = None
-    _local_version: str | None = None
-    _target_tag: str | None = None
-    _target_version: str | None = None
-
-    # Used for template properties
-    _tmpls: dict[str, str] = {}
-
+    _target: Release | None = None
+    _local: Release | None = None
     _session: Session
 
     # pylint: disable=too-many-arguments
@@ -48,15 +49,15 @@ class GhReleaseInstall:
         asset: str,
         destination: str | Path,
         extract: str | None = None,
-        version: str = LATEST_VERSION,
+        version: str = LATEST,
         version_file: str | None = None,
     ):
-        self.repository = repository
-        self.asset = asset
-        self.destination = Path(destination)
-        self.extract = extract
-        self.version = version
-        self.version_file = version_file
+        self._repository = repository
+        self._asset = asset
+        self._destination = str(destination)
+        self._extract = extract
+        self._version = version
+        self._version_file = version_file
 
         self._session = Session()
         if "GITHUB_TOKEN" in environ:
@@ -66,75 +67,66 @@ class GhReleaseInstall:
 
         register_unpack_formats()
 
-    def _format_tmpl(self, tmpl: str | None, **kwargs: str) -> str | None:
-        if tmpl is None:
-            return None
+    def _resolve_path(self, path: str, **variables: str) -> str:
+        if self._target is not None:
+            variables["tag"] = self._target.tag
+            variables["version"] = self._target.version
 
-        if self._target_version is not None:
-            kwargs["version"] = self._target_version
-        if self._target_tag is not None:
-            kwargs["tag"] = self._target_tag
+        return path.format(**variables)
 
-        return str(tmpl).format(**kwargs)
+    @property
+    def asset(self) -> str:
+        return self._resolve_path(self._asset)
 
-    @template_property
-    def asset(self) -> str | None:
-        return self._format_tmpl(self._tmpls["asset"])
-
-    @template_property
+    @property
     def destination(self) -> Path:
-        destination = Path(self._format_tmpl(self._tmpls["destination"]))  # type: ignore
+        destination = Path(self._resolve_path(self._destination))
 
         if destination.is_dir():
             return destination / self.asset
 
         return destination
 
-    @template_property
+    @property
     def extract(self) -> str | None:
-        return self._format_tmpl(self._tmpls["extract"])
+        if self._extract is None:
+            return None
+        return self._resolve_path(self._extract)
 
-    @template_property
+    @property
     def version_file(self) -> Path | None:
-        version_file = self._format_tmpl(
-            self._tmpls["version_file"],
-            destination=self.destination,
+        if self._version_file is None:
+            return None
+
+        return Path(
+            self._resolve_path(
+                self._version_file,
+                destination=str(self.destination),
+            )
         )
-        return Path(version_file) if version_file is not None else None
 
     def _github_asset_url(self, asset: str) -> str:
-        return f"https://github.com/{self.repository}/releases/download/{self._target_tag}/{asset}"
+        assert self._target is not None
+        return f"https://github.com/{self._repository}/releases/download/{self._target.tag}/{asset}"
 
     def _get_target_version(self):
         """
         If not provided, get latest tag/version from the Github repository.
         """
-        logger.debug(f"Requested '{self.version}' version")
-        if self.version == LATEST_VERSION:
-            url = f"https://api.github.com/repos/{self.repository}/releases/latest"
-
-            with self._session.get(url) as res:
-                res.raise_for_status()
-                body = res.json()
-
-            self._target_tag = body["tag_name"]
-            self._target_version = body["tag_name"].strip("v")
-            logger.info(f"Latest version is '{self._target_version}'")
+        if self._version == LATEST:
+            self._target = Release(get_latest_tag(self._session, self._repository))
         else:
-            self._target_tag = self.version
-            self._target_version = self.version.strip("v")
+            self._target = Release(self._version)
 
-        logger.debug(f"Target version resolved to '{self._target_version}'")
+        logger.debug(f"Target version is '{self._target.version}'")
 
     def _get_local_version(self):
         """
         Get local tag / version from possible version file.
         """
         if self.version_file is not None and self.version_file.exists():
-            local_version = self.version_file.read_text()
-            self._local_tag = local_version
-            self._local_version = local_version.strip("v")
-            logger.debug(f"Local version resolved to '{self._local_version}'")
+            self._local = Release(self.version_file.read_text(encoding="utf-8"))
+            logger.debug(f"Local version is '{self._local.version}'")
 
     def _download_release_asset(self, tmp_dir: Path):
         """
@@ -152,21 +144,22 @@ class GhReleaseInstall:
 
         return tmp_file
 
-    def _extract_release_asset(self, tmp_dir: Path, asset_file: Path):
+    def _extract_release_asset(self, tmp_dir: Path, asset_file: Path) -> Path:
         """
         Extract downloaded release archive.
         """
         unpack_archive(asset_file, tmp_dir)
+        assert self.extract is not None
         return tmp_dir / self.extract
 
     def run(self):
         self._get_target_version()
         self._get_local_version()
 
-        logger.debug(f"Target '{self._target_tag}' == Local '{self._local_tag}'")
-        if self._target_version == self._local_version:
-            logger.info("Target version is already installed")
-            sys.exit(0)
+        if self._local is not None:
+            if self._target.version == self._local.version:
+                logger.info("Target version is already installed")
+                sys.exit(0)
 
         with TemporaryDirectory(prefix="gh-release-installer") as tmp_dir:
             tmp_dir = Path(tmp_dir)
@@ -183,5 +176,5 @@ class GhReleaseInstall:
 
         # Save to local tag/version file
         if self.version_file is not None:
-            self.version_file.write_text(self._target_tag)
+            self.version_file.write_text(self._target.tag, encoding="utf-8")
             logger.info(f"Saved version file to '{self.version_file}'")
