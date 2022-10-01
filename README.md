@@ -60,7 +60,8 @@ gh-release-install --help
 
 ```sh
 usage: gh-release-install [-h] [--extract <filename>] [--version <version>]
-                          [--version-file <filename>] [-v] [-q]
+                          [--version-file <filename>]
+                          [--checksum <hash>:<digest|asset>] [-v] [-q]
                           REPOSITORY ASSET DESTINATION
 
 Install GitHub release file on your system.
@@ -87,6 +88,12 @@ optional arguments:
                         Track the version installed on the system using a file.
                         May contain variables such as '{destination}'. (default:
                         None)
+  --checksum <hash>:<digest|asset>
+                        Asset checksum used to verify the downloaded ASSET.
+                        <hash> can be one of md5, sha1, sha224, sha256, sha384,
+                        sha512. <digest|asset> can either be the expected
+                        checksum, or the filename of an checksum file in the
+                        release assets. (default: None)
   -v, --verbose         Increase the verbosity. (default: 0)
   -q, --quiet           Disable logging. (default: None)
 
@@ -106,5 +113,7 @@ examples:
         'prometheus-{version}.linux-amd64.tar.gz' \
         --extract 'prometheus-{version}.linux-amd64/prometheus' \
         '/usr/local/bin/prometheus' \
-        --version-file '{destination}.version'
+        --version-file '{destination}.version' \
+        --checksum 'sha256:sha256sums.txt'
+
 ```
