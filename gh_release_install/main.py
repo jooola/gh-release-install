@@ -137,7 +137,7 @@ class GhReleaseInstall:
         """
         Get local tag / version from possible version file.
         """
-        if self.version_file is not None and self.version_file.exists():
+        if self.version_file is not None and self.version_file.is_file():
             self._local = Release(self.version_file.read_text(encoding="utf-8"))
             logger.debug(f"Local version is '{self._local.version}'")
 
@@ -199,7 +199,11 @@ class GhReleaseInstall:
         self._get_local_version()
 
         if self._local is not None:
-            if self._target.version == self._local.version:
+            if not self.destination.is_file():
+                logger.warning(
+                    f"Local version is referring to an inexistent asset '{self.destination}'"
+                )
+            elif self._target.version == self._local.version:
                 logger.info("Target version is already installed")
                 sys.exit(0)
 
