@@ -1,3 +1,17 @@
+<a name="v0.10.0"></a>
+
+## [v0.10.0](https://github.com/jooola/gh-release-install/compare/v0.9.0...v0.10.0) (2023-02-08)
+
+### :bug: Bug Fixes
+
+- install when orphan version file is up to date
+
+### :gear: CI/CD
+
+- use GITHUB_TOKEN to prevent rate limits ([#104](https://github.com/jooola/gh-release-install/issues/104))
+- use python 3.10 as stable version
+- test python3.11
+
 <a name="v0.9.0"></a>
 
 ## [v0.9.0](https://github.com/jooola/gh-release-install/compare/v0.8.0...v0.9.0) (2022-10-01)
