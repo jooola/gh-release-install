@@ -1,3 +1,11 @@
+<a name="v0.11.0"></a>
+
+## [v0.11.0](https://github.com/jooola/gh-release-install/compare/v0.10.1...v0.11.0) (2023-05-30)
+
+### :rocket: Features
+
+- drop python 3.7
+
 <a name="v0.10.1"></a>
 
 ## [v0.10.1](https://github.com/jooola/gh-release-install/compare/v0.10.0...v0.10.1) (2023-05-30)
