@@ -27,4 +27,4 @@ def register_unpack_formats():
     if "bz2" not in map(lambda x: x[0], formats):
         register_unpack_format("bz2", [".bz2"], _unpack_bz2, description="bz2 files")
 
-    logger.debug(f"Unpack formats available: {formats}")
+    logger.debug("Unpack formats available: %s", formats)
