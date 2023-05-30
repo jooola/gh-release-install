@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "gh_release_install"
-version = "0.10.1"
+version = "0.11.0"
 description = "CLI helper to install Github releases on your system."
 readme = "README.md"
 authors = ["Joola <jooola@users.noreply.github.com>"]
