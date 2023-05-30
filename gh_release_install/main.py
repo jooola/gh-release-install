@@ -131,7 +131,7 @@ class GhReleaseInstall:
         else:
             self._target = Release(self._version)
 
-        logger.debug(f"Target version is '{self._target.version}'")
+        logger.debug("Target version is '%s'", self._target.version)
 
     def _get_local_version(self):
         """
@@ -139,7 +139,7 @@ class GhReleaseInstall:
         """
         if self.version_file is not None and self.version_file.is_file():
             self._local = Release(self.version_file.read_text(encoding="utf-8"))
-            logger.debug(f"Local version is '{self._local.version}'")
+            logger.debug("Local version is '%s'", self._local.version)
 
     def _get_checksum_from_url(self, url: str) -> str | None:
         """
@@ -179,7 +179,7 @@ class GhReleaseInstall:
             res.raise_for_status()
             tmp_file = tmp_dir / self.asset
 
-            logger.debug(f"Saving asset to '{tmp_file}'")
+            logger.debug("Saving asset to '%s'", tmp_file)
             with tmp_file.open("wb") as tmp_fd:
                 for chunk in res.iter_content(chunk_size=2048):
                     tmp_fd.write(chunk)
@@ -201,7 +201,8 @@ class GhReleaseInstall:
         if self._local is not None:
             if not self.destination.is_file():
                 logger.warning(
-                    f"Local version is referring to an inexistent asset '{self.destination}'"
+                    "Local version is referring to an inexistent asset '%s'",
+                    self.destination,
                 )
             elif self._target.version == self._local.version:
                 logger.info("Target version is already installed")
@@ -219,13 +220,13 @@ class GhReleaseInstall:
 
             if self.extract is not None:
                 asset_file = self._extract_release_asset(tmp_dir, asset_file)
-                logger.info(f"Extracted archive to '{asset_file}'")
+                logger.info("Extracted archive to '%s'", asset_file)
 
             move(asset_file, self.destination)
             self.destination.chmod(0o755)
-            logger.info(f"Installed file to '{self.destination}'")
+            logger.info("Installed file to '%s'", self.destination)
 
         # Save to local tag/version file
         if self.version_file is not None:
             self.version_file.write_text(self._target.tag, encoding="utf-8")
-            logger.info(f"Saved version file to '{self.version_file}'")
+            logger.info("Saved version file to '%s'", self.version_file)

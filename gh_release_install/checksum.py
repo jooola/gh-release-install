@@ -68,6 +68,6 @@ def compute_file_checksum(algorithm: str, filepath: Path) -> str:
             mixer.update(blob)
 
     digest = mixer.hexdigest()
-    logger.debug(f"Computed {algorithm} digest '{digest}'")
+    logger.debug("Computed %s digest '%s'", algorithm, digest)
 
     return digest
