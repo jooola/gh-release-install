@@ -8,6 +8,10 @@
     ":semanticCommits"
   ],
   "labels": ["dependencies"],
+  "lockFileMaintenance": {
+    "enabled": true,
+    "schedule": ["after 4am and before 5am on monday"]
+  },
   "packageRules": [
     {
       "matchUpdateTypes": ["patch"],
