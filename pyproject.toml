@@ -25,7 +25,7 @@ gh-release-install = "gh_release_install.cli:run"
 python = "^3.8"
 requests = ">=2.31.0, <2.32"
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
 black = "^23.0.0"
 isort = "^5.9.3"
 mypy = "^1.0.0"
