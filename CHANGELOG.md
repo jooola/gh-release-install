@@ -1,3 +1,5 @@
+# Changelog
+
 <a name="v0.11.0"></a>
 
 ## [v0.11.0](https://github.com/jooola/gh-release-install/compare/v0.10.1...v0.11.0) (2023-05-30)
