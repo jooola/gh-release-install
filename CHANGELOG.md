@@ -2,6 +2,14 @@
 
 <a name="v0.11.0"></a>
 
+## [0.11.1](https://github.com/jooola/gh-release-install/compare/v0.11.0...v0.11.1) (2023-12-18)
+
+
+### Documentation
+
+* add support for python 3.12 ([e1f034b](https://github.com/jooola/gh-release-install/commit/e1f034b10609cf9c9df231cc328308a3de4e1ab8))
+* regenerate changelog ([a827693](https://github.com/jooola/gh-release-install/commit/a8276937d36006881b36b246463ece15df82fe53))
+
 ## [v0.11.0](https://github.com/jooola/gh-release-install/compare/v0.10.1...v0.11.0) (2023-05-30)
 
 ### :rocket: Features
