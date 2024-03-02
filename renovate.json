@@ -1,21 +1,14 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:base",
-    ":automergePatch",
+    "config:recommended",
     ":enablePreCommit",
-    ":preserveSemverRanges",
+    ":automergePatch",
     ":semanticCommits"
   ],
   "labels": ["dependencies"],
   "lockFileMaintenance": {
     "enabled": true,
     "schedule": ["after 4am and before 5am on monday"]
-  },
-  "packageRules": [
-    {
-      "matchManagers": ["poetry"],
-      "rangeStrategy": "widen"
-    }
-  ]
+  }
 }
