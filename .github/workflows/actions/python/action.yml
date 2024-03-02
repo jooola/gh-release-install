@@ -12,9 +12,8 @@ runs:
       with:
         python-version: ${{ inputs.python-version }}
 
-    - uses: snok/install-poetry@v1
-      with:
-        virtualenvs-in-project: true
+    - run: pipx install poetry
+      shell: bash
 
     - uses: actions/cache@v4
       with:
