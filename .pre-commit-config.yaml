@@ -48,7 +48,7 @@ repos:
   - repo: local
     hooks:
       - id: format
-        name: Format code
+        name: format
         description: Format code
         entry: make format
         language: system
@@ -56,7 +56,7 @@ repos:
         always_run: true
 
       - id: lint
-        name: Lint code
+        name: lint
         description: Lint code
         entry: make lint
         language: system
