@@ -16,7 +16,7 @@ install: .venv
 
 format: .venv
 	poetry run black .
-	poetry run isort --profile black .
+	poetry run isort .
 
 lint: .venv
 	poetry run black . --diff --check
