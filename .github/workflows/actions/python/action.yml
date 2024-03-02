@@ -16,7 +16,7 @@ runs:
       with:
         virtualenvs-in-project: true
 
-    - uses: actions/cache@v3
+    - uses: actions/cache@v4
       with:
         path: ${{ env.POETRY_CACHE_DIR }}
         key: ${{ runner.os }}-poetry-v1-${{ hashFiles('poetry.lock') }}
