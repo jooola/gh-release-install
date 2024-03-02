@@ -8,31 +8,29 @@ all: install format lint test
 install-poetry:
 	curl -sSL https://install.python-poetry.org | python3 -
 
-POETRY_VIRTUALENVS_IN_PROJECT = true
+export POETRY_VIRTUALENVS_IN_PROJECT = true
 
-INSTALL_STAMP := .installed
-install: $(INSTALL_STAMP)
-$(INSTALL_STAMP):
+install: .venv
+.venv:
 	poetry install
-	touch $(INSTALL_STAMP)
 
-format: install
+format: .venv
 	poetry run black .
 	poetry run isort --profile black .
 
-lint: install
+lint: .venv
 	poetry run black . --diff --check
 	poetry run pylint gh_release_install tests
 	poetry run mypy gh_release_install tests
 
-test: install
+test: .venv
 	poetry run pytest -n $(CPU_CORES) --color=yes -v --cov=gh_release_install tests
 
-e2e: install
+e2e: .venv
 	poetry run pytest -n $(CPU_CORES) --color=yes -v --cov=gh_release_install e2e
 
-examples: install
+examples: .venv
 	poetry run ./examples.sh
 
-ci-publish: install
+ci-publish: .venv
 	poetry publish --no-interaction --build
