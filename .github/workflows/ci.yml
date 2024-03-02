@@ -25,9 +25,7 @@ jobs:
 
       - uses: pre-commit/action@v3.0.1
 
-      - uses: actions/github-script@v7
-        with:
-          script: console.log(JSON.parse(fs.readFileSync(process.env.GITHUB_EVENT_PATH)))
+      - run: jq . "$GITHUB_EVENT_PATH"
 
       - uses: pre-commit-ci/lite-action@v1.0.2
         if: always()
