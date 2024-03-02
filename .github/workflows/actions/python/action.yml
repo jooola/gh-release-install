@@ -18,6 +18,6 @@ runs:
     - uses: actions/cache@v4
       with:
         path: ${{ env.POETRY_CACHE_DIR }}
-        key: ${{ runner.os }}-poetry-v1-${{ hashFiles('poetry.lock') }}
+        key: ${{ runner.os }}-py${{ inputs.python-version }}-poetry-v1-${{ hashFiles('**/poetry.lock') }}
         restore-keys: |
-          ${{ runner.os }}-poetry-v1-
+          ${{ runner.os }}-py${{ inputs.python-version }}-poetry-v1-
