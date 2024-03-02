@@ -3,12 +3,19 @@
   "extends": [
     "config:recommended",
     ":enablePreCommit",
-    ":automergePatch",
+    ":preserveSemverRanges",
     ":semanticCommits"
   ],
   "labels": ["dependencies"],
   "lockFileMaintenance": {
     "enabled": true,
+    "automerge": true,
     "schedule": ["after 4am and before 5am on monday"]
-  }
+  },
+  "packageRules": [
+    {
+      "matchUpdateTypes": ["patch"],
+      "automerge": true
+    }
+  ]
 }
