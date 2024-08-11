@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.11.2](https://github.com/jooola/gh-release-install/compare/v0.11.1...v0.11.2) (2024-08-11)
+
+
+### Bug Fixes
+
+* **deps:** update dependency requests to &gt;=2.32.3, &lt;2.33 ([#178](https://github.com/jooola/gh-release-install/issues/178)) ([08f1d6a](https://github.com/jooola/gh-release-install/commit/08f1d6a8e11b5aa6f62e6058c692a5770640acaa))
+
 ## [0.11.1](https://github.com/jooola/gh-release-install/compare/v0.11.0...v0.11.1) (2023-12-18)
 
 
