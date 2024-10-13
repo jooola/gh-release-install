@@ -1,4 +1,4 @@
-FROM python:3.12-alpine as builder
+FROM python:3.13-alpine as builder
 
 RUN python3 -m pip install --upgrade build
 
@@ -6,7 +6,7 @@ COPY . .
 
 RUN python3 -m build
 
-FROM python:3.12-alpine
+FROM python:3.13-alpine
 
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
