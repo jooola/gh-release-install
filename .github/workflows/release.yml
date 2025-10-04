@@ -1,0 +1,88 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*.*.*"]
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: 3.x
+
+      - name: Install dependencies
+        run: pip install build twine
+
+      - name: Build
+        run: python3 -m build
+
+      - name: Check
+        run: twine check --strict dist/*
+
+      - name: Upload packages artifact
+        if: startsWith(github.ref, 'refs/tags')
+        uses: actions/upload-artifact@v4
+        with:
+          name: python-packages
+          path: dist/
+
+  publish:
+    if: startsWith(github.ref, 'refs/tags')
+    needs: [build]
+
+    environment:
+      name: pypi
+      url: https://pypi.org/p/gh_release_install
+    permissions:
+      id-token: write
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download packages artifact
+        uses: actions/download-artifact@v5
+        with:
+          name: python-packages
+          path: dist/
+
+      - name: Publish packages to PyPI
+        uses: pypa/gh-action-pypi-publish@v1.13.0
+
+  publish-docker:
+    if: startsWith(github.ref, 'refs/tags')
+
+    runs-on: ubuntu-latest
+    env:
+      REGISTRY: ghcr.io
+      IMAGE_NAME: ${{ github.repository }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Login to the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels)
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}

@@ -2,13 +2,9 @@ name: CI
 
 on:
   push:
-    tags: ["v*.*.*"]
     branches: [main]
   pull_request:
     branches: [main]
-
-env:
-  POETRY_CACHE_DIR: ${{ github.workspace }}/.cache/poetry
 
 jobs:
   pre-commit:
@@ -17,9 +13,9 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      - uses: ./.github/workflows/actions/python
+      - uses: actions/setup-python@v6
         with:
-          python-version: "3.10"
+          python-version: 3.x
 
       - run: make install
 
@@ -30,12 +26,11 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      - uses: ./.github/workflows/actions/python
+      - uses: actions/setup-python@v6
         with:
-          python-version: "3.10"
+          python-version: 3.x
 
       - run: make install
-      - run: echo "::add-matcher::.github/matcher-python.json"
       - run: make lint
 
   test:
@@ -52,7 +47,7 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      - uses: ./.github/workflows/actions/python
+      - uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
 
@@ -60,53 +55,3 @@ jobs:
       - run: make test
       - run: make e2e
       - run: make examples
-
-  publish:
-    needs: test
-    runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags')
-    steps:
-      - uses: actions/checkout@v5
-
-      - uses: ./.github/workflows/actions/python
-        with:
-          python-version: "3.10"
-
-      - run: make install
-      - run: >
-          POETRY_PYPI_TOKEN_PYPI=${{ secrets.PYPI_TOKEN }}
-          make ci-publish
-
-  publish-docker:
-    needs: test
-    runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags')
-
-    env:
-      REGISTRY: ghcr.io
-      IMAGE_NAME: ${{ github.repository }}
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v5
-
-      - name: Login to the Container registry
-        uses: docker/login-action@v3
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Extract metadata (tags, labels)
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-
-      - name: Build and push
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}

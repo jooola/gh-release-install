@@ -50,7 +50,7 @@ class GhReleaseInstall:
     _local: Release | None = None
     _session: Session
 
-    # pylint: disable=too-many-arguments
+    # pylint: disable=too-many-arguments,too-many-positional-arguments
     def __init__(
         self,
         repository: str,
