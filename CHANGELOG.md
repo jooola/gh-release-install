@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.12.0](https://github.com/jooola/gh-release-install/compare/v0.11.2...v0.12.0) (2025-10-04)
+
+
+### Features
+
+* drop support for python3.8 ([#222](https://github.com/jooola/gh-release-install/issues/222)) ([b22ef95](https://github.com/jooola/gh-release-install/commit/b22ef95f44b581d59bca40001779798fc6134fce))
+* drop support for python3.9 ([#225](https://github.com/jooola/gh-release-install/issues/225)) ([dceec28](https://github.com/jooola/gh-release-install/commit/dceec2861d32463d96260e644e2a2581340ef7b3))
+
+
+### Bug Fixes
+
+* unlink destination before replacing it ([#220](https://github.com/jooola/gh-release-install/issues/220)) ([7e079a2](https://github.com/jooola/gh-release-install/commit/7e079a22c05f9dfd3973c436557cd3aeb0edc774))
+
 ## [0.11.2](https://github.com/jooola/gh-release-install/compare/v0.11.1...v0.11.2) (2024-08-11)
 
 

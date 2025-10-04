@@ -1,6 +1,6 @@
 [project]
 name = "gh_release_install"
-version = "0.11.2"
+version = "0.12.0"
 description = "CLI helper to install Github releases on your system."
 readme = "README.md"
 authors = [{ name = "Joola", email = "jooola@users.noreply.github.com" }]
