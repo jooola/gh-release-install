@@ -222,6 +222,9 @@ class GhReleaseInstall:
                 asset_file = self._extract_release_asset(tmp_dir, asset_file)
                 logger.info("Extracted archive to '%s'", asset_file)
 
+            if self.destination.is_file():
+                self.destination.unlink()
+
             move(asset_file, self.destination)
             self.destination.chmod(0o755)
             logger.info("Installed file to '%s'", self.destination)
