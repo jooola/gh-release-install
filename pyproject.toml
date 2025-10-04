@@ -4,7 +4,6 @@ version = "0.11.2"
 description = "CLI helper to install Github releases on your system."
 readme = "README.md"
 authors = [{ name = "Joola", email = "jooola@users.noreply.github.com" }]
-license = "GPL-3.0-only"
 classifiers = [
   "Development Status :: 3 - Alpha",
   "Environment :: Console",
