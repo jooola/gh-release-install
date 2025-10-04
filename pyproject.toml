@@ -1,13 +1,13 @@
-[tool.poetry]
+[project]
 name = "gh_release_install"
 version = "0.11.2"
 description = "CLI helper to install Github releases on your system."
 readme = "README.md"
-authors = ["Joola <jooola@users.noreply.github.com>"]
+authors = [{ name = "Joola", email = "jooola@users.noreply.github.com" }]
+license = "GPL-3.0-only"
 classifiers = [
   "Development Status :: 3 - Alpha",
   "Environment :: Console",
-  "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
   "Programming Language :: Python",
   "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3.8",
@@ -19,27 +19,33 @@ classifiers = [
   "Topic :: System :: Software Distribution",
 ]
 
-[tool.poetry.scripts]
+requires-python = ">=3.8"
+dependencies = [
+  "requests>=2.32.3,<2.33",
+]
+
+[project.optional-dependencies]
+dev = [
+  "black>=24.0,<25.0",
+  "isort>=5.9.3,<6.0",
+  "mypy>=1.0.0,<2.0",
+  "pylint>=3.0.0,<4.0",
+  "pytest>=8.0.0,<9.0",
+  "pytest-cov>=5.0.0,<6.0",
+  "pytest-xdist>=3.0.0,<4.0",
+  "requests-mock>=1.9.3,<2.0",
+  "types-requests>=2.31.0,<3.0",
+]
+
+[project.scripts]
 gh-release-install = "gh_release_install.cli:run"
 
-[tool.poetry.dependencies]
-python = "^3.8"
-requests = ">=2.32.3, <2.33"
-
-[tool.poetry.group.dev.dependencies]
-black = "^24.0.0"
-isort = "^5.9.3"
-mypy = "^1.0.0"
-pylint = "^3.0.0"
-pytest = "^8.0.0"
-pytest-cov = "^5.0.0"
-pytest-xdist = "^3.0.0"
-requests-mock = "^1.9.3"
-types-requests = "^2.31.0"
+[tool.setuptools]
+packages = ["gh_release_install"]
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
 
 [tool.pylint.messages_control]
 disable = [
