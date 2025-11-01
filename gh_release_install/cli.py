@@ -70,6 +70,21 @@ parser.add_argument(
              checksum, or the filename of an checksum file in the release assets.""",
 )
 parser.add_argument(
+    "--owner",
+    metavar="<owner>",
+    help="""Owner of the DESTINATION file. Ignored when not set.""",
+)
+parser.add_argument(
+    "--group",
+    metavar="<group>",
+    help="""Group of the DESTINATION file. Defaults to <owner>.""",
+)
+parser.add_argument(
+    "--mode",
+    metavar="<mode>",
+    help="""Permissions of the DESTINATION file. Defaults to 755.""",
+)
+parser.add_argument(
     "-v",
     "--verbose",
     dest="verbosity",
@@ -125,6 +140,9 @@ def run():
         version=args.version,
         version_file=args.version_file,
         checksum=args.checksum,
+        owner=args.owner,
+        group=args.group,
+        mode=args.mode,
     )
 
     try:

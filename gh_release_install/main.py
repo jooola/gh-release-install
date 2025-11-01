@@ -4,7 +4,7 @@ import logging
 import sys
 from os import environ
 from pathlib import Path
-from shutil import move, unpack_archive
+from shutil import chown, move, unpack_archive
 from tempfile import TemporaryDirectory
 
 from requests import Session
@@ -60,6 +60,9 @@ class GhReleaseInstall:
         version: str = LATEST,
         version_file: str | None = None,
         checksum: str | None = None,
+        owner: str | None = None,
+        group: str | None = None,
+        mode: str | None = None,
     ):
         self._repository = repository
         self._asset = asset
@@ -71,6 +74,10 @@ class GhReleaseInstall:
         self.checksum_algorithm, self.checksum = None, None
         if checksum is not None:
             self.checksum_algorithm, self.checksum = parse_checksum_option(checksum)
+
+        self._owner = owner
+        self._group = group
+        self._mode = mode
 
         self._session = Session()
         if "GITHUB_TOKEN" in environ:
@@ -226,7 +233,15 @@ class GhReleaseInstall:
                 self.destination.unlink()
 
             move(asset_file, self.destination)
-            self.destination.chmod(0o755)
+
+            if self._mode is not None:
+                self.destination.chmod(int(self._mode, 8))
+            else:
+                self.destination.chmod(0o755)
+
+            if self._owner is not None:
+                chown(self.destination, self._owner, self._group or self._owner)
+
             logger.info("Installed file to '%s'", self.destination)
 
         # Save to local tag/version file
