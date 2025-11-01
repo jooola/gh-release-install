@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from os import environ
 from pathlib import Path
 from subprocess import check_output
 
@@ -17,6 +18,8 @@ PARAMS = [
             "asset": "node_exporter-{version}.linux-amd64.tar.gz",
             "extract": "node_exporter-{version}.linux-amd64/node_exporter",
             "version": "v1.2.2",
+            "owner": environ.get("USER", "root"),
+            "group": environ.get("USER", "root"),
         },
         "--version",
         "node_exporter, version 1.2.2 (branch: HEAD, revision: 26645363b486e12be40af7ce4fc91e731a33104e)\n"
