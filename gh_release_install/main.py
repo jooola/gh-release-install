@@ -229,6 +229,13 @@ class GhReleaseInstall:
                 asset_file = self._extract_release_asset(tmp_dir, asset_file)
                 logger.info("Extracted archive to '%s'", asset_file)
 
+                if not asset_file.exists():
+                    logger.error(
+                        "Asset '%s' not found in archive",
+                        asset_file.relative_to(tmp_dir),
+                    )
+                    sys.exit(1)
+
             if self.destination.is_file():
                 self.destination.unlink()
 
