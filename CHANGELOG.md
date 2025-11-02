@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.13.1](https://github.com/jooola/gh-release-install/compare/v0.13.0...v0.13.1) (2025-11-02)
+
+
+### Bug Fixes
+
+* handle file not found error when extracting from an archive ([#236](https://github.com/jooola/gh-release-install/issues/236)) ([ea63c7a](https://github.com/jooola/gh-release-install/commit/ea63c7aebb37d125a248da39b83abd6b25655cda))
+
 ## [0.13.0](https://github.com/jooola/gh-release-install/compare/v0.12.0...v0.13.0) (2025-11-01)
 
 
