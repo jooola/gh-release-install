@@ -71,6 +71,18 @@ PARAMS = [
         "restic 0.12.1 compiled with go1.16.6 on linux/amd64\n",
         id="restic/restic",
     ),
+    pytest.param(
+        "wp",
+        "sha256:wp-cli-{version}.phar.sha256",
+        {
+            "repository": "wp-cli/wp-cli",
+            "asset": "wp-cli-{version}.phar ",
+            "version": "v2.12.0",
+        },
+        ["cli", "version"],
+        "WP-CLI 2.12.0\n",
+        id="wp-cli/wp-cli",
+    ),
 ]
 
 
