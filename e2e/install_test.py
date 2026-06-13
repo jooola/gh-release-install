@@ -21,7 +21,7 @@ PARAMS = [
             "owner": environ.get("USER", "root"),
             "group": environ.get("USER", "root"),
         },
-        "--version",
+        ["--version"],
         "node_exporter, version 1.2.2 (branch: HEAD, revision: 26645363b486e12be40af7ce4fc91e731a33104e)\n"
         "  build user:       root@b9cb4aa2eb17\n"
         "  build date:       20210806-13:44:18\n"
@@ -37,7 +37,7 @@ PARAMS = [
             "asset": "shfmt_{tag}_linux_amd64",
             "version": "v3.3.1",
         },
-        "-version",
+        ["-version"],
         "v3.3.1\n",
         id="mvdan/sh",
     ),
@@ -50,7 +50,7 @@ PARAMS = [
             "extract": "loki-linux-amd64",
             "version": "v2.2.1",
         },
-        "-version",
+        ["-version"],
         "loki, version 2.2.1 (branch: HEAD, revision: babea82e)\n"
         "  build user:       root@e2d295b84e26\n"
         "  build date:       2021-04-06T00:52:41Z\n"
@@ -67,15 +67,15 @@ PARAMS = [
             "extract": "restic_{version}_linux_amd64",
             "version": "v0.12.1",
         },
-        "version",
+        ["version"],
         "restic 0.12.1 compiled with go1.16.6 on linux/amd64\n",
         id="restic/restic",
     ),
 ]
 
 
-def get_version(destination_file: Path, version_command: str):
-    return check_output([destination_file, version_command], text=True)
+def get_version(destination_file: Path, version_command: list[str]):
+    return check_output([destination_file, *version_command], text=True)
 
 
 @pytest.mark.parametrize(PARAMS_ARGS, PARAMS)
