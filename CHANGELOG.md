@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.13.2](https://github.com/jooola/gh-release-install/compare/v0.13.1...v0.13.2) (2026-06-13)
+
+
+### Bug Fixes
+
+* **deps:** update dependency black to v26 ([#245](https://github.com/jooola/gh-release-install/issues/245)) ([22b149a](https://github.com/jooola/gh-release-install/commit/22b149a1a119d2ed636191f58c0f1ffa04254d64))
+* **deps:** update dependency isort to v8 ([#246](https://github.com/jooola/gh-release-install/issues/246)) ([33fd0de](https://github.com/jooola/gh-release-install/commit/33fd0de5a53146cfa1299a0a2b91be24fd7509af))
+* **deps:** update dependency mypy to v2 ([#258](https://github.com/jooola/gh-release-install/issues/258)) ([bc49f48](https://github.com/jooola/gh-release-install/commit/bc49f485832730fedeef032d9fa5deca292c2b00))
+* **deps:** update dependency pytest-cov to &gt;=7,&lt;7.2 ([#252](https://github.com/jooola/gh-release-install/issues/252)) ([df381aa](https://github.com/jooola/gh-release-install/commit/df381aae9becbb614e83b916915b90dc2b452b14))
+* **deps:** update dependency requests to &gt;=2.33.1,&lt;2.34 ([#253](https://github.com/jooola/gh-release-install/issues/253)) ([3ad9f76](https://github.com/jooola/gh-release-install/commit/3ad9f76e5b5770fe379bc405619a90442f16e4b8))
+* **deps:** update dependency requests to &gt;=2.34.2,&lt;2.35 ([#259](https://github.com/jooola/gh-release-install/issues/259)) ([9dd06df](https://github.com/jooola/gh-release-install/commit/9dd06df3436c1c62f75322d59c85da13e48b7d1e))
+
 ## [0.13.1](https://github.com/jooola/gh-release-install/compare/v0.13.0...v0.13.1) (2025-11-02)
 
 
