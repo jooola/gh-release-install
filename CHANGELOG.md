@@ -1,5 +1,22 @@
 # Changelog
 
+## [v0.14.0](https://github.com/jooola/gh-release-install/releases/tag/v0.14.0)
+
+### Features
+
+- support template variable for checksum files (#261)
+- support checksum files without filename in them (#261)
+- support extracting gzipped files (without tar) (#264)
+
+### Bug Fixes
+
+- **deps**: update dependency requests to >=2.33.1,<2.34 (#253)
+- **deps**: update dependency pytest-cov to >=7,<7.2 (#252)
+- **deps**: update dependency isort to v8 (#246)
+- **deps**: update dependency requests to >=2.34.2,<2.35 (#259)
+- **deps**: update dependency mypy to v2 (#258)
+- **deps**: update dependency black to v26 (#245)
+
 ## [0.13.1](https://github.com/jooola/gh-release-install/compare/v0.13.0...v0.13.1) (2025-11-02)
 
 
