@@ -71,9 +71,9 @@ class GhReleaseInstall:
         self._version = version
         self._version_file = version_file
 
-        self.checksum_algorithm, self.checksum = None, None
+        self.checksum_algorithm, self._checksum = None, None
         if checksum is not None:
-            self.checksum_algorithm, self.checksum = parse_checksum_option(checksum)
+            self.checksum_algorithm, self._checksum = parse_checksum_option(checksum)
 
         self._owner = owner
         self._group = group
@@ -124,6 +124,12 @@ class GhReleaseInstall:
                 destination=str(self.destination),
             )
         )
+
+    @property
+    def checksum(self) -> str | None:
+        if self._checksum is None:
+            return None
+        return self._resolve_path(self._checksum)
 
     def _github_asset_url(self, asset: str) -> str:
         assert self._target is not None

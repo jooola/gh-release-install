@@ -88,6 +88,11 @@ def test_compute_file_checksum(hash_name, expected):
             "382b1c013eec3d67ac05f9a3266ad1fa0707ce95",
             id="sha1sum",
         ),
+        pytest.param(
+            "382b1c013eec3d67ac05f9a3266ad1fa0707ce95\n",
+            "382b1c013eec3d67ac05f9a3266ad1fa0707ce95",
+            id="sha1sum without filename",
+        ),
     ],
 )
 def test_find_checksum_in_file(content, expected):

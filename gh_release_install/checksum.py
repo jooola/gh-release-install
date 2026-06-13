@@ -48,11 +48,16 @@ def is_hexdigest(algorithm: str, value: str) -> bool:
 
 
 def find_checksum_in_file(content: str, filename: str) -> str | None:
-    lines = content.splitlines()
-    for line in lines:
+    # Support checksum list with filenames
+    for line in content.splitlines():
         match = re.search(r"^([0-9a-fA-F]+)\s+" + re.escape(filename) + r"$", line)
         if match is not None:
             return match.group(1)
+
+    # Support a single checksum without filename
+    match = re.search(r"^([0-9a-fA-F]+)$", content)
+    if match is not None:
+        return match.group(1)
 
     return None
 
