@@ -76,12 +76,25 @@ PARAMS = [
         "sha256:wp-cli-{version}.phar.sha256",
         {
             "repository": "wp-cli/wp-cli",
-            "asset": "wp-cli-{version}.phar ",
+            "asset": "wp-cli-{version}.phar",
             "version": "v2.12.0",
         },
         ["cli", "version"],
         "WP-CLI 2.12.0\n",
         id="wp-cli/wp-cli",
+    ),
+    pytest.param(
+        "taplo",
+        None,
+        {
+            "repository": "tamasfe/taplo",
+            "asset": "taplo-linux-x86_64.gz",
+            "extract": "taplo-linux-x86_64",
+            "version": "0.10.0",
+        },
+        ["--version"],
+        "taplo 0.10.0\n",
+        id="tamasfe/taplo",
     ),
 ]
 
