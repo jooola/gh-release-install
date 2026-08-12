@@ -8,6 +8,8 @@ from shutil import chown, move, unpack_archive
 from tempfile import TemporaryDirectory
 
 from requests import Session
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 
 from .checksum import (
     compute_file_checksum,
@@ -80,6 +82,9 @@ class GhReleaseInstall:
         self._mode = mode
 
         self._session = Session()
+        max_retries = Retry(total=3, connect=3, backoff_factor=0.5)
+        self._session.mount("https://", HTTPAdapter(max_retries=max_retries))
+
         if "GITHUB_TOKEN" in environ:
             logger.debug("Loading GITHUB_TOKEN from env")
             github_token = environ.get("GITHUB_TOKEN")
