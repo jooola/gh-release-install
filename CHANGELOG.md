@@ -1,5 +1,18 @@
 # Changelog
 
+## [v0.15.0](https://github.com/jooola/gh-release-install/releases/tag/v0.15.0)
+
+[Compare to previous version](https://github.com/jooola/gh-release-install/compare/v0.14.0...v0.15.0)
+
+### Features
+
+- retry on failed connection with github (#273) ([8ed39a0](https://github.com/jooola/gh-release-install/commit/8ed39a0b66d68f1cf1ca42f6942d4805084dc885))
+
+### Bug Fixes
+
+- **deps**: update dependency pytest to >=9,<9.2 (#265) ([c5023ed](https://github.com/jooola/gh-release-install/commit/c5023edf068114d215a3b37a1e503e0afce4179f))
+- **deps**: update dependency mypy to >=2.3,<2.4 (#268) ([3bd3001](https://github.com/jooola/gh-release-install/commit/3bd3001db15c16fa998f1eccc9a5cbbfbbe17493))
+
 ## [v0.14.0](https://github.com/jooola/gh-release-install/releases/tag/v0.14.0)
 
 ### Features
