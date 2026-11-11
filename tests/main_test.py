@@ -65,3 +65,11 @@ def test_installer_get_local_version_exists(
     assert installer._local is not None
     assert installer._local.tag == "v2.28.1"
     assert installer._local.version == "2.28.1"
+
+from gh_release_install.main import Release
+
+
+def test_release_version_keeps_trailing_v():
+    assert Release("v2.28.1").version == "2.28.1"
+    assert Release("v1.0-dev").version == "1.0-dev"
+    assert Release("1.0v").version == "1.0v"

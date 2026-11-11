@@ -34,7 +34,7 @@ class Release:
 
     @property
     def version(self) -> str:
-        return self.tag.strip("v")
+        return self.tag.removeprefix("v")
 
 
 def get_latest_tag(session: Session, repository: str) -> str:
